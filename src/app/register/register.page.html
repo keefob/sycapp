@@ -77,7 +77,7 @@
     </ion-item>
 
 
-    <ion-button expand="block" color="secondary" (click)="saveProfile($event)">
+    <ion-button expand="block"  (click)="saveProfile($event)">
       <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
       Continue
     </ion-button>
@@ -88,13 +88,19 @@
 
   <ion-list class="ion-text-center" *ngIf="showFaceCapture">
 
+    <ion-card style="background-color: gray;" *ngIf="option==3">
+      <ion-card-content>
+        <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(imageBase64Id1)" class="invitecanvas">
+      </ion-card-content>
+    </ion-card>
+
     <ion-card style="background-color: gray;">
       <ion-card-content>
         <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(imageBase64)" class="invitecanvas">
       </ion-card-content>
     </ion-card>
 
-    <ion-button size="large" color="secondary" (click)="captureFace()">
+    <ion-button size="large" *ngIf="!hasCaptureImage" color="secondary" (click)="captureFace()">
       <ion-icon slot="end" style="color: #fff" name="camera-outline"></ion-icon>
       <div class="font-md-17">Capture</div>
     </ion-button>
@@ -103,11 +109,10 @@
 
     <div style="height: 20px;" *ngIf="hasCaptureImage"></div>
 
-    <ion-button *ngIf="hasCaptureImage" size="large" color="secondary" (click)="saveFace()">
+    <ion-button *ngIf="hasCaptureImage" size="large"  (click)="saveIdentification()">
       <ion-icon slot="end" style="color: #fff" name="images-outline"></ion-icon>
-      <div class="font-md-17">Continue</div>
+      <div class="font-md-17">{{textFinish}}</div>
     </ion-button>
-
 
 
   </ion-list>

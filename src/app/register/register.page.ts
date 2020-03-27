@@ -60,6 +60,24 @@ export class RegisterPage implements OnInit {
 
     await loading.present();
 
+    setTimeout(()=>{
+
+
+      
+      let base64Image = this.option == 1 ? this.data.id_1_Base64 : this.data.id_2_Base64;
+      this.imageBase64 = base64Image;
+
+      this.hasCaptureImage = true;
+
+      if(this.option==2){
+        this.saveIdentification();
+      }
+     
+
+      loading.dismiss();
+    },3000);
+
+    /*
     this.camera.getPicture(this.cameraOptions).then((imageData) => {
       // this.camera.DestinationType.FILE_URI gives file URI saved in local
       // this.camera.DestinationType.DATA_URL gives base64 URI
@@ -84,9 +102,47 @@ export class RegisterPage implements OnInit {
       loading.dismiss();
 
     });
+    */
+
   }
 
+  option : number = 1;
+
+  textFinish : string = "Capture another side";
+
+  saveIdentification(){
+
+    if( this.option==1 ){
+      console.log("entro por 1");
+      this.showFaceCapture = true;
+      this.imageBase64 = this.data.imageCameraBase64;
   
+      this.hasCaptureImage = false;
+      this.option= 2;
+
+      this.textFinish = "Finish";
+
+      return;
+
+    }
+    
+    if( this.option==2 ){
+      console.log("entro por 2");
+      this.option= 3;
+      /*
+      this.showFaceCapture = true;
+      this.imageBase64 = this.data.imageCameraBase64;
+  
+      this.hasCaptureImage = false;
+      */
+
+    }
+
+    
+
+  }
+
+  imageBase64Id1 = this.data.id_1_Base64;
     
 
 }
