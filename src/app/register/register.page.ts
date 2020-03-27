@@ -52,7 +52,7 @@ export class RegisterPage implements OnInit {
 
 }
 
-  async captureFace() {
+  async captureFace() { 
 
     const loading = await this.loadingController.create({
       message: 'Taking a photo ...'
