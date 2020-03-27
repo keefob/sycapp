@@ -1,0 +1,117 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{textHeader}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+
+  <ion-list *ngIf="!showFaceCapture">
+
+    <ion-item-divider>
+      <ion-label>
+        Apartment Information
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-label>Select Apartment #</ion-label>
+      <ion-select placeholder="Select One">
+        <ion-select-option value="1">Apt # 1234</ion-select-option>
+        <ion-select-option value="2">Apt # 1235</ion-select-option>
+        <ion-select-option value="3">Apt # 1239</ion-select-option>
+        <ion-select-option value="4">Apt # 1250</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label>Select Resident Name </ion-label>
+      <ion-select placeholder="Select One">
+        <ion-select-option value="1">John Smith</ion-select-option>
+        <ion-select-option value="2">Ben Kenobi</ion-select-option>
+        <ion-select-option value="3">Jose Lopez</ion-select-option>
+        <ion-select-option value="4">Luis Dunn</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Select Reason of Your Visit</ion-label>
+      <ion-select placeholder="Select One">
+        <ion-select-option value="1">Food Delivery</ion-select-option>
+        <ion-select-option value="2">Grocery Delivery</ion-select-option>
+        <ion-select-option value="3">Friend / Family</ion-select-option>
+        <ion-select-option value="4"> Item Pick Up</ion-select-option>
+        <ion-select-option value="5"> Item Drop Off</ion-select-option>
+        <ion-select-option value="6"> Other</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item-divider>
+      <ion-label>
+        Guest Information
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-label position="stacked">Name <ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-input required type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Mobile # <ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-input required type="tel"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Email <ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-input required type="email"></ion-input>
+    </ion-item>
+
+
+    <ion-button expand="block" color="secondary" (click)="saveProfile($event)">
+      <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
+      Continue
+    </ion-button>
+
+
+  </ion-list>
+
+
+  <ion-list class="ion-text-center" *ngIf="showFaceCapture">
+
+    <ion-card style="background-color: gray;">
+      <ion-card-content>
+        <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(imageBase64)" class="invitecanvas">
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button size="large" color="secondary" (click)="captureFace()">
+      <ion-icon slot="end" style="color: #fff" name="camera-outline"></ion-icon>
+      <div class="font-md-17">Capture</div>
+    </ion-button>
+
+
+
+    <div style="height: 20px;" *ngIf="hasCaptureImage"></div>
+
+    <ion-button *ngIf="hasCaptureImage" size="large" color="secondary" (click)="saveFace()">
+      <ion-icon slot="end" style="color: #fff" name="images-outline"></ion-icon>
+      <div class="font-md-17">Continue</div>
+    </ion-button>
+
+
+
+  </ion-list>
+
+
+
+</ion-content>
