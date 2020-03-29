@@ -31,6 +31,10 @@ export class RegisterPage implements OnInit {
 
   hasCaptureImage: boolean = false;
 
+  showGuestInformation: boolean = false;
+
+  showFinish: boolean = false;
+
   constructor(private camera: Camera,
     public alertController: AlertController,
     public loadingController: LoadingController,
@@ -41,6 +45,10 @@ export class RegisterPage implements OnInit {
 
     this.imageBase64 = this.data.imageCameraBase64;
 
+  }
+
+  continueFirst(event) {
+    this.showGuestInformation = true;
   }
 
   saveProfile(event) {
@@ -136,6 +144,12 @@ export class RegisterPage implements OnInit {
       this.hasCaptureImage = false;
       */
 
+      return;
+
+    }
+
+    if( this.option==3 ){
+this.showFinish = true;
     }
 
     
