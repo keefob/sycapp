@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-
 import { LoadingController, AlertController } from '@ionic/angular';
+
+import { ModalController } from '@ionic/angular';
+
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ParameterService } from '../api/parameter.service';
+import { CameraPage } from './camera.page';
 
 @Component({
   selector: 'app-register',
@@ -13,15 +15,6 @@ import { ParameterService } from '../api/parameter.service';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
-
-  cameraOptions: CameraOptions = {
-    quality: 20,//20
-    destinationType: this.camera.DestinationType.DATA_URL,
-    encodingType: this.camera.EncodingType.JPEG,
-    mediaType: this.camera.MediaType.PICTURE,
-    cameraDirection: 0,
-    correctOrientation: true
-  }
 
   showFaceCapture: boolean = false;
 
@@ -35,11 +28,12 @@ export class RegisterPage implements OnInit {
 
   showFinish: boolean = false;
 
-  constructor(private camera: Camera,
+  constructor(
     public alertController: AlertController,
     public loadingController: LoadingController,
     private _DomSanitizationService: DomSanitizer,
-    private data: ParameterService ) { } 
+    private data: ParameterService,
+    public modalController: ModalController) { } 
 
   ngOnInit() {
 
@@ -60,6 +54,28 @@ export class RegisterPage implements OnInit {
 
 }
 
+  async modalCamera() {
+
+    console.log("present modalCamera");
+
+    const modal = await this.modalController.create({
+      component: CameraPage
+    });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+        //let imageBase64 = dataReturned.data;
+        //console.log('Return Data modalCamera:'+ dataReturnedLoad);
+
+        //let base64Image = 'data:image/jpeg;base64,' + dataReturned.data;
+        this.imageBase64 = dataReturned.data;
+        
+      }
+    });
+
+    return await modal.present();
+  }
+
   async captureFace() { 
 
     const loading = await this.loadingController.create({
@@ -68,6 +84,7 @@ export class RegisterPage implements OnInit {
 
     await loading.present();
 
+    
     setTimeout(()=>{
 
 
@@ -78,12 +95,14 @@ export class RegisterPage implements OnInit {
       this.hasCaptureImage = true;
 
       if(this.option==2){
-        this.saveIdentification();
+        this.saveIdentification(); 
       }
      
 
       loading.dismiss();
     },3000);
+
+    
 
     /*
     this.camera.getPicture(this.cameraOptions).then((imageData) => {
@@ -94,6 +113,10 @@ export class RegisterPage implements OnInit {
       this.imageBase64 = base64Image;
 
       this.hasCaptureImage = true;
+
+      if(this.option==2){
+        this.saveIdentification();
+      }
 
       loading.dismiss();
 
@@ -111,6 +134,7 @@ export class RegisterPage implements OnInit {
 
     });
     */
+    
 
   }
 

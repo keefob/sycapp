@@ -1,0 +1,46 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Take Photo
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid id="container">
+    <ion-row>
+
+      <webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+      [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+      [videoOptions]="videoOptions"
+      [imageQuality]="1"
+      (cameraSwitched)="cameraWasSwitched($event)"
+      (initError)="handleInitError($event)"
+      ></webcam>
+
+    </ion-row>
+
+    <ion-row>
+      <ul *ngFor="let error of errors">
+        <li>{{error | json}}</li>
+      </ul>
+    </ion-row>
+    
+
+    <br />
+
+    <ion-row class="font-lt-16">
+      <ion-col>
+        <ion-button expand="block" (click)="triggerSnapshot()">Take a Photo</ion-button>
+      </ion-col>
+    </ion-row>
+
+
+    
+
+
+  </ion-grid>
+
+
+</ion-content>

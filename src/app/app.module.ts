@@ -9,16 +9,16 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { Camera} from '@ionic-native/camera/ngx';
+import {WebcamModule} from 'ngx-webcam';
+import { CameraPage } from './register/camera.page';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CameraPage],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,WebcamModule],
   providers: [
     StatusBar,
     SplashScreen,
-    Camera,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
