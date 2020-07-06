@@ -31,7 +31,7 @@ export class RegisterPage implements OnInit {
   constructor(
     public alertController: AlertController,
     public loadingController: LoadingController,
-    private _DomSanitizationService: DomSanitizer,
+    public _DomSanitizationService: DomSanitizer,
     private data: ParameterService,
     public modalController: ModalController) { } 
 
