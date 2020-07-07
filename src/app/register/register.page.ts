@@ -8,6 +8,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { ParameterService } from '../api/parameter.service';
 import { CameraPage } from './camera.page';
+import { DeliveryService } from '../api/delivery.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -18,9 +20,10 @@ export class RegisterPage implements OnInit {
 
   showFaceCapture: boolean = false;
 
-  textHeader: string = 'Guest Registration';
+  textHeader: string = 'Apartment Information';
 
   imageBase64: string;
+  successImageBase64: string;
 
   hasCaptureImage: boolean = false;
 
@@ -28,31 +31,74 @@ export class RegisterPage implements OnInit {
 
   showFinish: boolean = false;
 
+  listUnitEntity: any[] = [];
+
+  listReasonVisit: any[] = [];
+
   constructor(
     public alertController: AlertController,
     public loadingController: LoadingController,
     public _DomSanitizationService: DomSanitizer,
     private data: ParameterService,
-    public modalController: ModalController) { } 
+    public modalController: ModalController,
+    private deliveryService: DeliveryService,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
 
     this.imageBase64 = this.data.imageCameraBase64;
+    this.successImageBase64 = this.data.successImageBase64;
+
+    //const routeSubscription = this.activatedRoute.params.subscribe(params => {
+
+      this.listUnitEntity = [];
+    this.listReasonVisit = [];
+
+      this.deliveryService.getToken(this.data.clientId,this.data.clientSecret,
+             this.data.user, this.data.pass).subscribe(
+        res => {
+          if (res) {
+            localStorage.setItem("outh2_token", res.access_token);
+            this.deliveryService.getUnitEntity(parseInt(localStorage.getItem('centity'))).subscribe(
+              listResult => {
+                this.listUnitEntity = listResult.listUnitEntity;
+              }
+            );
+
+            this.deliveryService.getReasonsVisit().subscribe(
+              listResult => {
+                this.listReasonVisit = listResult._embedded.reasonsVisits;
+              }
+            );
+            
+
+          }
+        },
+        error => {
+
+        },
+        () => {
+        }
+      );
+
+    //});
+
 
   }
 
   continueFirst(event) {
     this.showGuestInformation = true;
+    this.textHeader = "Visitor Information";
   }
 
   saveProfile(event) {
 
 
-   
+
     this.showFaceCapture = true;
     this.textHeader = 'Take a Picture of your ID';
 
-}
+  }
 
   async modalCamera() {
 
@@ -69,14 +115,14 @@ export class RegisterPage implements OnInit {
 
         //let base64Image = 'data:image/jpeg;base64,' + dataReturned.data;
         this.imageBase64 = dataReturned.data;
-        
+
       }
     });
 
     return await modal.present();
   }
 
-  async captureFace() { 
+  async captureFace() {
 
     const loading = await this.loadingController.create({
       message: 'Taking a photo ...'
@@ -84,25 +130,26 @@ export class RegisterPage implements OnInit {
 
     await loading.present();
 
-    
-    setTimeout(()=>{
+
+    /*
+    setTimeout(() => {
 
 
-      
+
       let base64Image = this.option == 1 ? this.data.id_1_Base64 : this.data.id_2_Base64;
       this.imageBase64 = base64Image;
 
       this.hasCaptureImage = true;
 
-      if(this.option==2){
-        this.saveIdentification(); 
+      if (this.option == 2) {
+        this.saveIdentification();
       }
-     
+
 
       loading.dismiss();
-    },3000);
+    }, 3000);
+*/
 
-    
 
     /*
     this.camera.getPicture(this.cameraOptions).then((imageData) => {
@@ -134,33 +181,33 @@ export class RegisterPage implements OnInit {
 
     });
     */
-    
+
 
   }
 
-  option : number = 1;
+  option: number = 1;
 
-  textFinish : string = "Capture another side";
+  textFinish: string = "Capture another side";
 
-  saveIdentification(){
+  saveIdentification() {
 
-    if( this.option==1 ){
+    if (this.option == 1) {
       console.log("entro por 1");
       this.showFaceCapture = true;
       this.imageBase64 = this.data.imageCameraBase64;
-  
+
       this.hasCaptureImage = false;
-      this.option= 2;
+      this.option = 2;
 
       this.textFinish = "Finish";
 
       return;
 
     }
-    
-    if( this.option==2 ){
+
+    if (this.option == 2) {
       console.log("entro por 2");
-      this.option= 3;
+      this.option = 3;
       /*
       this.showFaceCapture = true;
       this.imageBase64 = this.data.imageCameraBase64;
@@ -172,15 +219,15 @@ export class RegisterPage implements OnInit {
 
     }
 
-    if( this.option==3 ){
-this.showFinish = true;
+    if (this.option == 3) {
+      this.showFinish = true;
     }
 
-    
+
 
   }
 
-  imageBase64Id1 = this.data.id_1_Base64;
-    
+  //imageBase64Id1 = this.data.id_1_Base64;
+
 
 }
