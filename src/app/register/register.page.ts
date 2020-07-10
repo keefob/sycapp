@@ -130,46 +130,70 @@ export class RegisterPage implements OnInit {
 
   }
 
-  showSuggestions: boolean = false;
-
   eventHandler(event) {
 
     this.listFilterUnitEntity = [];
     console.log(event, event.keyCode, event.keyIdentifier);
 
-    this.showSuggestions = true;
-    this.listFilterUnitEntity = this.listUnitEntity;
+    //this.listFilterUnitEntity = this.listUnitEntity;
+
+    console.log("this.unitEntityDesc eventHandler",this.unitEntityDesc);
+
+    this.listFilterUnitEntity = this.listUnitEntity.filter(
+      (object) => {
+        const value = object["description"].toLowerCase();
+
+        return value.includes(this.unitEntityDesc);
+      }
+    );
 
     this.cunit_entity=undefined;
-    //this.unitEntityDesc= undefined;
 
-    //let event ;
+    if(this.popoverComp!==undefined){
+      this.popoverComp.remove();
+    }
+    
+    
+    if(this.listFilterUnitEntity.length>0){
+      this.presentPopover(event);
+    }
+    
+    /*
     if(event.keyCode==13){
       this.presentPopover(event);
     }
+    */
     
 
   } 
 
+  popoverComp: any;
+
   async presentPopover(ev: any) {
-    const popover = await this.popoverController.create({
+    this.popoverComp = await this.popoverController.create({
       component: FilterListPage,
       cssClass: 'my-custom-class',
       event: ev,
       translucent: true,
+      showBackdrop: false,
+      keyboardClose:false,
       componentProps: {
-        'filterList': this.listFilterUnitEntity
+        'filterList': this.listFilterUnitEntity,
+        //'cunit_entityEl' : this.cunit_entityEl
       }
     });
-    popover.onDidDismiss().then((dataReturned) => {
-      if (dataReturned !== null) {
+    
+    
+
+    this.popoverComp.onDidDismiss().then((dataReturned) => {
+      if (dataReturned.data !== null) {
           console.log("retorna popover ",dataReturned.data);
           //unitEntity.cunit_entity
           let unitEntity = dataReturned.data;
-          this.cunit_entity=unitEntity.cunitEntity;
-          this.unitEntityDesc= unitEntity.description;
+          this.cunit_entity=unitEntity?.cunitEntity;
+          this.unitEntityDesc= unitEntity?.description;
       }});
-    return await popover.present();
+    return await this.popoverComp.present();
   }
 
 

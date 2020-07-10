@@ -11,6 +11,8 @@ export class FilterListPage  implements OnInit{
    //option: number;
 
    @Input() filterList: any = [];
+
+   //Input() cunit_entityEl: any;
   
    //itemSelected : any;
 
@@ -25,6 +27,8 @@ export class FilterListPage  implements OnInit{
   }
 
   public ngOnInit(): void {
+
+    //this.cunit_entityEl.setFocus();
 
     console.log("filterList popover",this.filterList);
    
