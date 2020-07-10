@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Take Photo
+      Camera Feature
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -32,7 +32,7 @@
 
     <ion-row class="font-lt-16">
       <ion-col>
-        <ion-button expand="block" (click)="triggerSnapshot()">Take a Photo</ion-button>
+        <ion-button expand="block" (click)="triggerSnapshot()">{{option==1 ? 'Take picture of front of ID': 'Take picture of back of ID'}}</ion-button>
       </ion-col>
     </ion-row>
 

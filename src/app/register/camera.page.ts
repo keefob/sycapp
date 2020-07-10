@@ -10,6 +10,8 @@ import { Subject, Observable } from 'rxjs';
 })
 export class CameraPage implements OnInit{
 
+  @Input() option: number;
+
      // toggle webcam on/off
   public showWebcam = true;
   public allowCameraSwitch = true;

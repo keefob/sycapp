@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 
-import { LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController, AlertController, IonInput } from '@ionic/angular';
 
 import { ModalController } from '@ionic/angular';
 
@@ -10,6 +10,10 @@ import { ParameterService } from '../api/parameter.service';
 import { CameraPage } from './camera.page';
 import { DeliveryService } from '../api/delivery.service';
 import { ActivatedRoute } from '@angular/router';
+import { Observer, Observable } from 'rxjs';
+
+import { PopoverController } from '@ionic/angular';
+import { FilterListPage } from './filter-list.page';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +26,10 @@ export class RegisterPage implements OnInit {
 
   textHeader: string = 'Apartment Information';
 
-  imageBase64: string;
+  imageBase64_1: string;
+
+  imageBase64_2: string;
+
   successImageBase64: string;
 
   hasCaptureImage: boolean = false;
@@ -32,8 +39,24 @@ export class RegisterPage implements OnInit {
   showFinish: boolean = false;
 
   listUnitEntity: any[] = [];
+  listFilterUnitEntity: any[] = [];
 
   listReasonVisit: any[] = [];
+
+  //unitEntity:any;
+  unitEntityDesc: any;
+
+  resident_name;
+  resident_lastname;
+  resident_email;
+  id_reason_visit;
+  cunit_entity;
+  visitor_mobile_phone_number;
+  visitor_name;
+  visitor_lastname;
+  visitor_email;
+  file1;fileName1;
+  file2;fileName2;
 
   constructor(
     public alertController: AlertController,
@@ -42,11 +65,14 @@ export class RegisterPage implements OnInit {
     private data: ParameterService,
     public modalController: ModalController,
     private deliveryService: DeliveryService,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    public popoverController: PopoverController) {
+     }
 
   ngOnInit() {
 
-    this.imageBase64 = this.data.imageCameraBase64;
+    this.imageBase64_1 = this.data.imageCameraBase64;
+    this.imageBase64_2 = this.data.imageCameraBase64;
     this.successImageBase64 = this.data.successImageBase64;
 
     //const routeSubscription = this.activatedRoute.params.subscribe(params => {
@@ -54,11 +80,26 @@ export class RegisterPage implements OnInit {
       this.listUnitEntity = [];
     this.listReasonVisit = [];
 
+    this.deliveryService.getUnitEntity(parseInt(localStorage.getItem('centity'))).subscribe(
+      listResult => {
+        this.listUnitEntity = listResult.listUnitEntity;
+      }
+    );
+
+    this.deliveryService.getReasonsVisit().subscribe(
+      listResult => {
+        //this.listReasonVisit = listResult._embedded.reasonsVisits;
+        this.listReasonVisit = listResult.listReasonVisit;
+      }
+    );
+
+    /*
       this.deliveryService.getToken(this.data.clientId,this.data.clientSecret,
              this.data.user, this.data.pass).subscribe(
         res => {
           if (res) {
             localStorage.setItem("outh2_token", res.access_token);
+            
             this.deliveryService.getUnitEntity(parseInt(localStorage.getItem('centity'))).subscribe(
               listResult => {
                 this.listUnitEntity = listResult.listUnitEntity;
@@ -71,6 +112,7 @@ export class RegisterPage implements OnInit {
               }
             );
             
+            
 
           }
         },
@@ -80,23 +122,78 @@ export class RegisterPage implements OnInit {
         () => {
         }
       );
+      */
+      
 
     //});
 
 
   }
 
-  continueFirst(event) {
+  showSuggestions: boolean = false;
+
+  eventHandler(event) {
+
+    this.listFilterUnitEntity = [];
+    console.log(event, event.keyCode, event.keyIdentifier);
+
+    this.showSuggestions = true;
+    this.listFilterUnitEntity = this.listUnitEntity;
+
+    this.cunit_entity=undefined;
+    //this.unitEntityDesc= undefined;
+
+    //let event ;
+    if(event.keyCode==13){
+      this.presentPopover(event);
+    }
+    
+
+  } 
+
+  async presentPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: FilterListPage,
+      cssClass: 'my-custom-class',
+      event: ev,
+      translucent: true,
+      componentProps: {
+        'filterList': this.listFilterUnitEntity
+      }
+    });
+    popover.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+          console.log("retorna popover ",dataReturned.data);
+          //unitEntity.cunit_entity
+          let unitEntity = dataReturned.data;
+          this.cunit_entity=unitEntity.cunitEntity;
+          this.unitEntityDesc= unitEntity.description;
+      }});
+    return await popover.present();
+  }
+
+
+  continueFirst() {
+
+
+    console.log("continu first",this.cunit_entity);
+
+    if(this.cunit_entity==undefined){
+      this.unitEntityDesc="";
+      return false;
+    }
+
     this.showGuestInformation = true;
     this.textHeader = "Visitor Information";
   }
 
-  saveProfile(event) {
+  saveProfile() {
 
 
 
     this.showFaceCapture = true;
-    this.textHeader = 'Take a Picture of your ID';
+    //this.textHeader = 'Take a Picture of your ID';
+    this.textHeader = 'Take picture of front of ID';
 
   }
 
@@ -105,7 +202,10 @@ export class RegisterPage implements OnInit {
     console.log("present modalCamera");
 
     const modal = await this.modalController.create({
-      component: CameraPage
+      component: CameraPage,
+      componentProps: {
+        'option': this.option
+      }
     });
 
     modal.onDidDismiss().then((dataReturned) => {
@@ -114,75 +214,24 @@ export class RegisterPage implements OnInit {
         //console.log('Return Data modalCamera:'+ dataReturnedLoad);
 
         //let base64Image = 'data:image/jpeg;base64,' + dataReturned.data;
-        this.imageBase64 = dataReturned.data;
+        if(this.option == 1){
+          this.imageBase64_1 = dataReturned.data;
+          this.option = 2;
+          this.textHeader = 'Take picture of back of ID';
+        }else if(this.option == 2){
+          this.imageBase64_2 = dataReturned.data;
+          this.option = 1;
+          this.hasCaptureImage = true;
+          this.textFinish = "Finish";
+          //this.textHeader = 'Take a Picture of your ID';
+          console.log("this.showFaceCapture",this.showFaceCapture);
+        }
+        
 
       }
     });
 
     return await modal.present();
-  }
-
-  async captureFace() {
-
-    const loading = await this.loadingController.create({
-      message: 'Taking a photo ...'
-    });
-
-    await loading.present();
-
-
-    /*
-    setTimeout(() => {
-
-
-
-      let base64Image = this.option == 1 ? this.data.id_1_Base64 : this.data.id_2_Base64;
-      this.imageBase64 = base64Image;
-
-      this.hasCaptureImage = true;
-
-      if (this.option == 2) {
-        this.saveIdentification();
-      }
-
-
-      loading.dismiss();
-    }, 3000);
-*/
-
-
-    /*
-    this.camera.getPicture(this.cameraOptions).then((imageData) => {
-      // this.camera.DestinationType.FILE_URI gives file URI saved in local
-      // this.camera.DestinationType.DATA_URL gives base64 URI
-
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-      this.imageBase64 = base64Image;
-
-      this.hasCaptureImage = true;
-
-      if(this.option==2){
-        this.saveIdentification();
-      }
-
-      loading.dismiss();
-
-    }, (err) => {
-
-      console.log(err);
-
-      if (this.data.imageCameraBase64 === this.imageBase64) {
-        this.hasCaptureImage = true;
-      } else {
-        this.hasCaptureImage = false;
-      }
-
-      loading.dismiss();
-
-    });
-    */
-
-
   }
 
   option: number = 1;
@@ -191,43 +240,98 @@ export class RegisterPage implements OnInit {
 
   saveIdentification() {
 
-    if (this.option == 1) {
-      console.log("entro por 1");
-      this.showFaceCapture = true;
-      this.imageBase64 = this.data.imageCameraBase64;
+    let imageBlob1;
+    let imageBlob2;
 
-      this.hasCaptureImage = false;
-      this.option = 2;
+    this.blobFromDataURI(this.imageBase64_1).subscribe(data => {
 
-      this.textFinish = "Finish";
+      imageBlob1 = data;
+      let fileName1 = 'file1.' +this.getInfoFromBase64(this.imageBase64_1).extension;
 
-      return;
+      this.blobFromDataURI(this.imageBase64_2).subscribe(data => {
 
-    }
+        imageBlob2 = data;
+        let fileName2 = 'file2.' +this.getInfoFromBase64(this.imageBase64_2).extension;
 
-    if (this.option == 2) {
-      console.log("entro por 2");
-      this.option = 3;
-      /*
-      this.showFaceCapture = true;
-      this.imageBase64 = this.data.imageCameraBase64;
+
+        this.deliveryService.registerVisit(this.resident_name,
+          this.resident_lastname,
+          this.resident_email,
+          this.id_reason_visit,
+          this.cunit_entity,
+          this.visitor_mobile_phone_number,
+          this.visitor_name,
+          this.visitor_lastname,
+          this.visitor_email,
+          imageBlob1,fileName1,
+          imageBlob2,fileName2).subscribe(data => {
+            
+            this.showFinish = true;
+            this.showFaceCapture = true;
+            this.textHeader = "Finish";
+
+            });
   
-      this.hasCaptureImage = false;
-      */
+      },
+      (err) => {
+        //this.error = err 
+        console.log(err);
+        
+      });
 
-      return;
 
-    }
-
-    if (this.option == 3) {
-      this.showFinish = true;
-    }
+    },
+    (err) => {
+      //this.error = err 
+      console.log(err);
+      
+    });
 
 
 
   }
 
-  //imageBase64Id1 = this.data.id_1_Base64;
+  blobFromDataURI(base64): Observable<Blob> {
+
+    return Observable.create((observer: Observer<Blob>) => {
+
+      const info = this.getInfoFromBase64(base64);
+      const sliceSize = 512;
+      const byteCharacters = window.atob(info.rawBase64);
+      const byteArrays = [];
+
+      for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+        const byteNumbers = new Array(slice.length);
+
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        byteArrays.push(new Uint8Array(byteNumbers));
+      }
+
+      var fileblob = new Blob(byteArrays, { type: info.mime });
+
+      observer.next(fileblob);
+      observer.complete();
+
+    });
+  }
+
+  private getInfoFromBase64(base64: string) {
+    const meta = base64.split(',')[0];
+    const rawBase64 = base64.split(',')[1].replace(/\s/g, '');
+    const mime = /:([^;]+);/.exec(meta)[1];
+    const extension = /\/([^;]+);/.exec(meta)[1];
+
+    return {
+      mime,
+      extension,
+      meta,
+      rawBase64
+    };
+  }
 
 
 }

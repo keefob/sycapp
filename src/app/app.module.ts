@@ -14,8 +14,12 @@ import { AppRoutingModule } from './app-routing.module';
 import {WebcamModule} from 'ngx-webcam';
 import { CameraPage } from './register/camera.page';
 
+import {FilterListPage} from './register/filter-list.page';
+
+//import { AutoCompleteModule } from 'ionic4-auto-complete';
+
 @NgModule({
-  declarations: [AppComponent, CameraPage],
+  declarations: [AppComponent, CameraPage, FilterListPage], 
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,WebcamModule,HttpClientModule],
   providers: [

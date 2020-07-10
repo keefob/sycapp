@@ -14,10 +14,13 @@ export class HomePage {
 
   ngOnInit() {
 
-    const routeSubscription = this.activatedRoute.params.subscribe(params => {
-      const centity = params['centity'];
+    let centity = "1";
       localStorage.setItem("centity", centity);
       console.log("se setea centity = "+centity);
+      
+    const routeSubscription = this.activatedRoute.params.subscribe(params => {
+      //const centity = params['centity'];
+      
     });
 
   }

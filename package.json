@@ -25,6 +25,7 @@
     "@ionic/angular": "^5.2.3",
     "cordova-browser": "^6.0.0",
     "core-js": "^2.5.4",
+    "ionic4-auto-complete": "^2.7.2",
     "ngx-webcam": "^0.3.0",
     "rxjs": "^6.5.5",
     "tslib": "^1.13.0",

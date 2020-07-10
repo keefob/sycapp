@@ -1,5 +1,5 @@
 <ion-header translucent>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -27,6 +27,8 @@
     <br />
     -->
   
+<form name="form" (ngSubmit)="f.form.valid && continueFirst()" #f="ngForm" novalidate >
+
 
   <ion-list *ngIf="!showFaceCapture && !showGuestInformation">
 
@@ -40,44 +42,81 @@
 
     <ion-item>
       <ion-label position="floating">Select Apartment #</ion-label>
-      <ion-select placeholder="Select One" [(ngModel)]="cunit_entity">
-        <ion-select-option value="{{ unity.cunit_entity }}" *ngFor="let unity of listUnitEntity">{{unity.description}}
+      
+      <!--
+      <ion-select placeholder="Select One" interface="action-sheet" [(ngModel)]="cunit_entity"
+      name="cunit_entityTxt"  required
+      #cunit_entityTxt="ngModel"
+      [ngClass]="{ 'is-invalid': f.submitted && cunit_entityTxt.invalid }">
+        <ion-select-option value="{{ unity.cunitEntity }}" *ngFor="let unity of listUnitEntity">{{unity.description}}
         </ion-select-option>
       </ion-select>
+      -->
+
+      <ion-input type="search" [(ngModel)]="unitEntityDesc"
+      name="cunit_entityTxt"  required
+      #cunit_entityTxt="ngModel"
+      [ngClass]="{ 'is-invalid': f.submitted && cunit_entityTxt.invalid }"
+      (keyup)="eventHandler($event)"></ion-input>
+     
+      <div *ngIf="f.submitted && cunit_entityTxt.invalid" class="invalid-feedback">
+        <div *ngIf="cunit_entityTxt.errors.required">Aparment is required</div>
+      </div>
+     
+
     </ion-item>
 
 
     <ion-item>
 
       <ion-label position="floating">Resident Name</ion-label>
-      <ion-input type="text" placeholder="" [(ngModel)]="resident_name"></ion-input>
+      <ion-input type="text" [(ngModel)]="resident_name" name="resident_nameTxt"  required
+      #resident_nameTxt="ngModel"
+      [ngClass]="{ 'is-invalid': f.submitted && resident_nameTxt.invalid }"></ion-input>
+
+      <div *ngIf="f.submitted && resident_nameTxt.invalid" class="invalid-feedback">
+        <div *ngIf="resident_nameTxt.errors.required">Resident Name is required</div>
+      </div>
+
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Resident Last Name</ion-label>
-      <ion-input type="text" placeholder="" [(ngModel)]="resident_lastname"></ion-input>
+      <ion-input type="text" placeholder="" [(ngModel)]="resident_lastname"
+      name="resident_lastnameTxt"  required
+      #resident_lastnameTxt="ngModel"
+      [ngClass]="{ 'is-invalid': f.submitted && resident_lastnameTxt.invalid }"
+      ></ion-input>
+
+      <div *ngIf="f.submitted && resident_lastnameTxt.invalid" class="invalid-feedback">
+        <div *ngIf="resident_lastnameTxt.errors.required">Resident Last Name is required</div>
+      </div>
+
     </ion-item>
 
-
-
-    <ion-item>
-      <ion-label position="floating">Resident Email</ion-label>
-      <ion-input type="email" placeholder="" [(ngModel)]="resident_email"></ion-input>
-    </ion-item>
 
     <ion-item>
       <ion-label position="floating">Select Reason of Your Visit</ion-label>
-      <ion-select placeholder="Select One" [(ngModel)]="id_reason_visit">
-        <ion-select-option value="{{ reason.id }}" *ngFor="let reason of listReasonVisit">{{reason.description}}
+      <ion-select placeholder="Select One" [(ngModel)]="id_reason_visit"
+      name="id_reason_visitTxt"  required
+      #id_reason_visitTxt="ngModel"
+      [ngClass]="{ 'is-invalid': f.submitted && id_reason_visitTxt.invalid }"
+      >
+        <ion-select-option value="{{ reason.idReasonVisit }}" *ngFor="let reason of listReasonVisit">{{reason.description}}
         </ion-select-option>
       </ion-select>
+
+      <div *ngIf="f.submitted && id_reason_visitTxt.invalid" class="invalid-feedback">
+        <div *ngIf="id_reason_visitTxt.errors.required">Reason of Your Visit is required</div>
+      </div>
+
     </ion-item>
 
 
 
     <div style="height: 20px;"></div>
 
-    <ion-button expand="block" (click)="continueFirst($event)" type="submit">
+    <ion-button expand="full" size="large" type="submit">
       <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
       Continue
     </ion-button>
@@ -86,34 +125,74 @@
 
   </ion-list>
 
-  <ion-list *ngIf="!showFaceCapture && showGuestInformation">
+</form>
 
+
+<form name="form2" (ngSubmit)="f2.form.valid && saveProfile()" #f2="ngForm" novalidate >
+
+  <ion-list *ngIf="!showFaceCapture && showGuestInformation">
 
     <ion-item>
 
       <ion-label position="floating">Visitor Name</ion-label>
-      <ion-input type="text" placeholder="" [(ngModel)]="visitor_name"></ion-input>
+      <ion-input type="text" placeholder="" [(ngModel)]="visitor_name"
+      name="visitor_nameTxt"  required
+      #visitor_nameTxt="ngModel"
+      [ngClass]="{ 'is-invalid': f2.submitted && visitor_nameTxt.invalid }"></ion-input>
+
+      <div *ngIf="f2.submitted && visitor_nameTxt.invalid" class="invalid-feedback">
+        <div *ngIf="visitor_nameTxt.errors.required">Visitor Name is required</div>
+      </div>
+
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Visitor Last Name</ion-label>
-      <ion-input type="text" placeholder="" [(ngModel)]="visitor_lastname"></ion-input>
+      <ion-input type="text" placeholder="" [(ngModel)]="visitor_lastname"
+      name="visitor_lastnameTxt"  required
+      #visitor_lastnameTxt="ngModel"
+      [ngClass]="{ 'is-invalid': f2.submitted && visitor_lastnameTxt.invalid }"></ion-input>
+
+      <div *ngIf="f2.submitted && visitor_lastnameTxt.invalid" class="invalid-feedback">
+        <div *ngIf="visitor_lastnameTxt.errors.required">Visitor Last Name is required</div>
+      </div>
+
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Visitor Mobile number</ion-label>
-      <ion-input type="text" placeholder="" [(ngModel)]="visitor_mobile_phone_number"></ion-input>
+      <ion-input type="tel" placeholder="" [(ngModel)]="visitor_mobile_phone_number"
+      required maxlength="20" minlength="10"
+      name="visitor_mobile_phone_numberTxt"  required
+      #visitor_mobile_phone_numberTxt="ngModel"
+      [ngClass]="{ 'is-invalid': f2.submitted && visitor_mobile_phone_numberTxt.invalid }"></ion-input>
+
+      <div *ngIf="f2.submitted && visitor_mobile_phone_numberTxt.invalid" class="invalid-feedback">
+        <div *ngIf="visitor_mobile_phone_numberTxt.errors.required">Visitor Mobile number is required</div>
+        <div *ngIf="visitor_mobile_phone_numberTxt.errors.maxlength">Max length 20</div>
+        <div *ngIf="visitor_mobile_phone_numberTxt.errors.minlength">Min length 10</div>
+      </div>
+
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Visitor Email</ion-label>
-      <ion-input type="email" placeholder="" [(ngModel)]="visitor_email"></ion-input>
+      <ion-input type="email" placeholder="" [(ngModel)]="visitor_email"
+      name="visitor_emailTxt"  required
+      #visitor_emailTxt="ngModel"
+      [ngClass]="{ 'is-invalid': f2.submitted && visitor_emailTxt.invalid }"
+      ></ion-input>
+
+      <div *ngIf="f2.submitted && visitor_emailTxt.invalid" class="invalid-feedback">
+        <div *ngIf="visitor_emailTxt.errors.required">Visitor Email is required</div>
+      </div>
+
     </ion-item>
 
 
     <div style="height: 20px;"></div>
 
-    <ion-button expand="block" (click)="saveProfile($event)" type="submit">
+    <ion-button expand="full" size="large"  type="submit">
       <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
       Continue
     </ion-button>
@@ -121,32 +200,35 @@
   </ion-list>
 
 
+  </form>
+
+
   <ion-list class="ion-text-center" *ngIf="showFaceCapture && !showFinish">
 
-    <ion-button size="large" *ngIf="!hasCaptureImage" color="secondary" (click)="modalCamera()">
+    <!-- primera imagen camara de fondo-->
+
+    <ion-card style="background-color: gray;" *ngIf="option==1 || hasCaptureImage">
+      <ion-card-content>
+        <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(imageBase64_1)" class="invitecanvas">
+      </ion-card-content>
+    </ion-card>
+
+
+    <ion-card style="background-color: gray;" *ngIf="option==2 || hasCaptureImage">
+      <ion-card-content>
+        <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(imageBase64_2)" class="invitecanvas">
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button   color="secondary" (click)="modalCamera()">
       <ion-icon slot="end" style="color: #fff" name="camera-outline"></ion-icon>
-      <div class="font-md-17">Capture</div>
+      <div class="font-md-17">{{option==1 ? 'Take picture of front of ID': 'Take picture of back of ID'}}</div>
     </ion-button>
-
-    <ion-card style="background-color: gray;" *ngIf="option==3">
-      <ion-card-content>
-        <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(imageBase64Id1)" class="invitecanvas">
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card style="background-color: gray;">
-      <ion-card-content>
-        <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(imageBase64)" class="invitecanvas">
-      </ion-card-content>
-    </ion-card>
-
-    
-
 
 
     <div style="height: 20px;" *ngIf="hasCaptureImage"></div>
 
-    <ion-button *ngIf="hasCaptureImage" size="large" (click)="saveIdentification()">
+    <ion-button *ngIf="hasCaptureImage" expand="full" size="large"  (click)="saveIdentification()">
       <ion-icon slot="end" style="color: #fff" name="images-outline"></ion-icon>
       <div class="font-md-17">{{textFinish}}</div>
     </ion-button>
@@ -160,7 +242,7 @@
 
       <ion-col>
         <div>
-          <img height="200" src="successImageBase64" />
+          <img height="200" [src]="_DomSanitizationService.bypassSecurityTrustUrl(successImageBase64)" />
         </div>
       </ion-col>
 
