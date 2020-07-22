@@ -94,7 +94,9 @@ export class DeliveryService {
     return this.http.get<any>(this.API_CATALOG_URL + `/visit_log/search/findByPhone?phone=${phoneNumber}`,  {headers: httpHeaders});
   }
 
-  registerVisit(resident_name,
+  registerVisit(
+    id_visit_log,
+    resident_name,
     resident_lastname,
     resident_email,
     id_reason_visit,
@@ -104,17 +106,22 @@ export class DeliveryService {
     visitor_lastname,
     visitor_email,
     file1,fileName1,
-    file2,fileName2
-    
+    file2,fileName2,
+    observation_reason_visit
     ): Observable<any> {
 
       const httpHeaders = new HttpHeaders();
       httpHeaders.set('Content-Type', 'multipart/form-data');
 
     var formdata = new FormData();
-    formdata.append("file", file1, fileName1);
-    formdata.append("fileb", file2, fileName2);
-    formdata.append("id_visit_log", "");
+    if(fileName1){
+      formdata.append("file", file1, fileName1);
+    }
+    if(fileName2){
+      formdata.append("fileb", file2, fileName2);
+    }  
+    
+    formdata.append("id_visit_log", id_visit_log);
     formdata.append("ccompany", "1");
     formdata.append("resident_name", resident_name);
     formdata.append("resident_lastname", resident_lastname);
@@ -125,6 +132,9 @@ export class DeliveryService {
     formdata.append("visitor_lastname", visitor_lastname);
     formdata.append("visitor_email", visitor_email);
     formdata.append("resident_email", resident_email);
+    formdata.append("observation_reason_visit", observation_reason_visit);
+    formdata.append("state", "A");
+    formdata.append("cestatus", "0");
 
     
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 
 import { ModalController } from '@ionic/angular';
 import { WebcamInitError, WebcamImage, WebcamUtil } from 'ngx-webcam';
@@ -8,7 +8,7 @@ import { Subject, Observable } from 'rxjs';
   selector: 'camera-page',
   templateUrl: './camera.page.html',
 })
-export class CameraPage implements OnInit{
+export class CameraPage implements OnInit, AfterViewInit {
 
   @Input() option: number;
 
@@ -18,6 +18,7 @@ export class CameraPage implements OnInit{
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
+    facingMode: "environment"
     // width: {ideal: 1024},
     // height: {ideal: 576}
   };
@@ -42,7 +43,20 @@ export class CameraPage implements OnInit{
     WebcamUtil.getAvailableVideoInputs()
       .then((mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+
+        
+
       });
+  }
+
+  ngAfterViewInit() {
+    
+    /*
+    setTimeout(() => {
+      console.log("---ngAfterViewInit() wait---");
+      this.showNextWebcam(true);
+  }, 1000);
+  */
   }
 
   public triggerSnapshot(): void {

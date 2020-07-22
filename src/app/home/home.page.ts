@@ -23,6 +23,13 @@ export class HomePage {
       
     });
 
+    this.activatedRoute.queryParams.subscribe(params => {
+        if(params['centity']){
+          localStorage.setItem("centity", params['centity']);
+        }        
+        console.log("recibió parámetro",localStorage.getItem("centity"));
+    });
+
   }
 
 }

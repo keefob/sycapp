@@ -57,6 +57,7 @@ export class RegisterPage implements OnInit {
   visitor_email;
   file1;fileName1;
   file2;fileName2;
+  observation_reason_visit;
 
   constructor(
     public alertController: AlertController,
@@ -130,6 +131,19 @@ export class RegisterPage implements OnInit {
 
   }
 
+  renderObservationReason: boolean = false;
+
+  changeReasonVisit(){
+    console.log("Reason selected: "+this.id_reason_visit);
+
+    if(this.id_reason_visit != 1){
+      this.renderObservationReason = true;
+    }else{
+      this.renderObservationReason = false;
+    }
+
+  }
+
   eventHandler(event) {
 
     this.listFilterUnitEntity = [];
@@ -137,13 +151,16 @@ export class RegisterPage implements OnInit {
 
     //this.listFilterUnitEntity = this.listUnitEntity;
 
-    console.log("this.unitEntityDesc eventHandler",this.unitEntityDesc);
+    //@ts-ignore
+    var cunit_entityTxt = document.getElementsByName("cunit_entityTxt")[0].value;
+
+    console.log("this.unitEntityDesc eventHandler",cunit_entityTxt);
 
     this.listFilterUnitEntity = this.listUnitEntity.filter(
       (object) => {
         const value = object["description"].toLowerCase();
 
-        return value.includes(this.unitEntityDesc);
+        return value.includes(cunit_entityTxt.toLowerCase());
       }
     );
 
@@ -196,30 +213,7 @@ export class RegisterPage implements OnInit {
     return await this.popoverComp.present();
   }
 
-
-  continueFirst() {
-
-
-    console.log("continu first",this.cunit_entity);
-
-    if(this.cunit_entity==undefined){
-      this.unitEntityDesc="";
-      return false;
-    }
-
-    this.showGuestInformation = true;
-    this.textHeader = "Visitor Information";
-  }
-
-  saveProfile() {
-
-
-
-    this.showFaceCapture = true;
-    //this.textHeader = 'Take a Picture of your ID';
-    this.textHeader = 'Take picture of front of ID';
-
-  }
+  
 
   async modalCamera() {
 
@@ -262,6 +256,77 @@ export class RegisterPage implements OnInit {
 
   textFinish: string = "Capture another side";
 
+  id_visit_log: number;
+
+  titleCaseWord(word: string) {
+    if (!word) return word;
+    return word[0].toUpperCase() + word.substr(1).toLowerCase();
+  }
+
+
+  saveProfile1() {
+
+
+    console.log("continu first",this.cunit_entity);
+
+    if(this.cunit_entity==undefined){
+      this.unitEntityDesc="";
+      return false;
+    }
+
+    this.showGuestInformation = true;
+    this.textHeader = "Visitor Information";
+
+    if(this.id_reason_visit == 1){
+      this.observation_reason_visit = null;
+    }
+
+    this.deliveryService.registerVisit(
+      "",
+      this.titleCaseWord(this.resident_name),
+      this.titleCaseWord(this.resident_lastname),
+      this.resident_email,
+      this.id_reason_visit,
+      this.cunit_entity,
+      this.visitor_mobile_phone_number,
+      this.visitor_name,
+      this.visitor_lastname,
+      this.visitor_email,
+      null,null,null,null,this.observation_reason_visit).subscribe(data => {
+        
+          console.log("data.id_visit_log",data.id_visit_log);
+
+          this.id_visit_log = data.id_visit_log;
+        });
+
+  }
+
+  saveProfile2() {
+
+    this.showFaceCapture = true;
+    //this.textHeader = 'Take a Picture of your ID';
+    this.textHeader = 'Take picture of front of ID';
+
+    this.deliveryService.registerVisit(
+      this.id_visit_log,
+      this.titleCaseWord(this.resident_name),
+      this.titleCaseWord(this.resident_lastname),
+      this.resident_email,
+      this.id_reason_visit,
+      this.cunit_entity,
+      this.visitor_mobile_phone_number,
+      this.titleCaseWord(this.visitor_name),
+      this.titleCaseWord(this.visitor_lastname),
+      this.visitor_email,
+      null,null,null,null,this.observation_reason_visit).subscribe(data => {
+        
+          console.log("data.id_visit_log 2",data.id_visit_log);
+
+          //this.id_visit_log = data.id_visit_log;
+        });
+
+  }
+
   saveIdentification() {
 
     let imageBlob1;
@@ -278,17 +343,19 @@ export class RegisterPage implements OnInit {
         let fileName2 = 'file2.' +this.getInfoFromBase64(this.imageBase64_2).extension;
 
 
-        this.deliveryService.registerVisit(this.resident_name,
-          this.resident_lastname,
+        this.deliveryService.registerVisit(
+          this.id_visit_log,
+          this.titleCaseWord(this.resident_name),
+          this.titleCaseWord(this.resident_lastname),
           this.resident_email,
           this.id_reason_visit,
           this.cunit_entity,
           this.visitor_mobile_phone_number,
-          this.visitor_name,
-          this.visitor_lastname,
+          this.titleCaseWord(this.visitor_name),
+          this.titleCaseWord(this.visitor_lastname),
           this.visitor_email,
           imageBlob1,fileName1,
-          imageBlob2,fileName2).subscribe(data => {
+          imageBlob2,fileName2,this.observation_reason_visit).subscribe(data => {
             
             this.showFinish = true;
             this.showFaceCapture = true;
