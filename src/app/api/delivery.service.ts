@@ -107,7 +107,10 @@ export class DeliveryService {
     visitor_email,
     file1,fileName1,
     file2,fileName2,
-    observation_reason_visit
+    observation_reason_visit,
+    cestatus,
+    visitor_id,
+    visitor_adreess1,visitor_adreess2,visitor_dob,visitor_sex
     ): Observable<any> {
 
       const httpHeaders = new HttpHeaders();
@@ -134,7 +137,13 @@ export class DeliveryService {
     formdata.append("resident_email", resident_email);
     formdata.append("observation_reason_visit", observation_reason_visit);
     formdata.append("state", "A");
-    formdata.append("cestatus", "0");
+    formdata.append("cestatus", cestatus);
+
+    formdata.append("visitor_id", visitor_id);
+    formdata.append("visitor_adreess1", visitor_adreess1);
+    formdata.append("visitor_adreess2", visitor_adreess2);
+    formdata.append("visitor_dob", visitor_dob);
+    formdata.append("visitor_sex", visitor_sex);
 
     
 

@@ -9,17 +9,17 @@
 
 <ion-content>
 
-  
-<form name="form" (ngSubmit)="f.form.valid && saveProfile1()" #f="ngForm" novalidate >
+
+  <form name="form" (ngSubmit)="f.form.valid && saveResident()" #f="ngForm" novalidate>
 
 
-  <ion-list *ngIf="!showFaceCapture && !showGuestInformation">
+    <ion-list *ngIf="showResident">
 
 
-    <ion-item>
-      <ion-label position="floating">Search Apartment #</ion-label>
-      
-      <!--
+      <ion-item>
+        <ion-label position="floating">Search Apartment #</ion-label>
+
+        <!--
       <ion-select placeholder="Select One" interface="action-sheet" [(ngModel)]="cunit_entity"
       name="cunit_entityTxt"  required
       #cunit_entityTxt="ngModel"
@@ -29,6 +29,7 @@
       </ion-select>
       -->
 
+        <!--
       <ion-input
       #cunit_entityEl
        type="search" [(ngModel)]="unitEntityDesc"
@@ -36,165 +37,172 @@
       #cunit_entityTxt="ngModel"
       [ngClass]="{ 'is-invalid': f.submitted && cunit_entityTxt.invalid }"
       (keyup)="eventHandler($event)"></ion-input>
-     
-      <div *ngIf="f.submitted && cunit_entityTxt.invalid" class="invalid-feedback">
-        <div *ngIf="cunit_entityTxt.errors.required">Aparment is required</div>
-      </div>
-     
+      -->
 
-    </ion-item>
+        <ion-input #cunit_entityEl type="search" [(ngModel)]="unitEntityDesc" name="cunit_entityTxt" required
+          #cunit_entityTxt="ngModel" [ngClass]="{ 'is-invalid': f.submitted && cunit_entityTxt.invalid }"></ion-input>
 
-
-    <ion-item>
-
-      <ion-label position="floating">Resident First Name</ion-label>
-      <ion-input type="text" [(ngModel)]="resident_name" name="resident_nameTxt"  required
-      #resident_nameTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f.submitted && resident_nameTxt.invalid }"
-      style="text-transform: capitalize;"></ion-input>
-
-      <div *ngIf="f.submitted && resident_nameTxt.invalid" class="invalid-feedback">
-        <div *ngIf="resident_nameTxt.errors.required">Resident First Name is required</div>
-      </div>
-
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Resident Last Name</ion-label>
-      <ion-input type="text" placeholder="" [(ngModel)]="resident_lastname"
-      name="resident_lastnameTxt"  required
-      #resident_lastnameTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f.submitted && resident_lastnameTxt.invalid }"
-      style="text-transform: capitalize;"
-      ></ion-input>
-
-      <div *ngIf="f.submitted && resident_lastnameTxt.invalid" class="invalid-feedback">
-        <div *ngIf="resident_lastnameTxt.errors.required">Resident Last Name is required</div>
-      </div>
-
-    </ion-item>
+        <div *ngIf="f.submitted && cunit_entityTxt.invalid" class="invalid-feedback">
+          <div *ngIf="cunit_entityTxt.errors.required">Aparment is required</div>
+        </div>
 
 
-    <ion-item>
-      <ion-label position="floating">Select Reason of Your Visit</ion-label>
-      <ion-select placeholder="Select One" [(ngModel)]="id_reason_visit"
-      name="id_reason_visitTxt"  required
-      #id_reason_visitTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f.submitted && id_reason_visitTxt.invalid }"
-      (ionChange)="changeReasonVisit()">
-        <ion-select-option value="{{ reason.idReasonVisit }}" *ngFor="let reason of listReasonVisit">{{reason.description}}
-        </ion-select-option>
-      </ion-select>
+      </ion-item>
 
-      <div *ngIf="f.submitted && id_reason_visitTxt.invalid" class="invalid-feedback">
-        <div *ngIf="id_reason_visitTxt.errors.required">Reason of Your Visit is required</div>
-      </div>
 
-    </ion-item>
+      <ion-item>
 
-    <ion-item *ngIf="renderObservationReason">
-      <ion-label position="floating">Vendor Name</ion-label>
-      <ion-textarea type="text" placeholder="" [(ngModel)]="observation_reason_visit"
-      name="observation_reason_visitTxt"  required
-      #observation_reason_visitTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f.submitted && observation_reason_visitTxt.invalid }"
-      style="text-transform: capitalize;"
-      ></ion-textarea>
+        <ion-label position="floating">Resident First Name</ion-label>
+        <ion-input type="text" [(ngModel)]="resident_name" name="resident_nameTxt" required #resident_nameTxt="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && resident_nameTxt.invalid }" style="text-transform: capitalize;">
+        </ion-input>
 
-      <div *ngIf="f.submitted && observation_reason_visitTxt.invalid" class="invalid-feedback">
-        <div *ngIf="observation_reason_visitTxt.errors.required">Vendor Name</div>
-      </div>
+        <div *ngIf="f.submitted && resident_nameTxt.invalid" class="invalid-feedback">
+          <div *ngIf="resident_nameTxt.errors.required">Resident First Name is required</div>
+        </div>
 
-    </ion-item>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Resident Last Name</ion-label>
+        <ion-input type="text" placeholder="" [(ngModel)]="resident_lastname" name="resident_lastnameTxt" required
+          #resident_lastnameTxt="ngModel" [ngClass]="{ 'is-invalid': f.submitted && resident_lastnameTxt.invalid }"
+          style="text-transform: capitalize;"></ion-input>
+
+        <div *ngIf="f.submitted && resident_lastnameTxt.invalid" class="invalid-feedback">
+          <div *ngIf="resident_lastnameTxt.errors.required">Resident Last Name is required</div>
+        </div>
+
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label position="floating">Select Reason of Your Visit</ion-label>
+        <ion-select placeholder="Select One" [(ngModel)]="id_reason_visit" name="id_reason_visitTxt" required
+          #id_reason_visitTxt="ngModel" [ngClass]="{ 'is-invalid': f.submitted && id_reason_visitTxt.invalid }"
+          (ionChange)="changeReasonVisit()">
+          <ion-select-option value="{{ reason.idReasonVisit }}" *ngFor="let reason of listReasonVisit">
+            {{reason.description}}
+          </ion-select-option>
+        </ion-select>
+
+        <div *ngIf="f.submitted && id_reason_visitTxt.invalid" class="invalid-feedback">
+          <div *ngIf="id_reason_visitTxt.errors.required">Reason of Your Visit is required</div>
+        </div>
+
+      </ion-item>
+
+      <ion-item *ngIf="renderObservationReason">
+        <ion-label position="floating">Vendor Name</ion-label>
+        <ion-textarea type="text" placeholder="" [(ngModel)]="observation_reason_visit"
+          name="observation_reason_visitTxt" required #observation_reason_visitTxt="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && observation_reason_visitTxt.invalid }"
+          style="text-transform: capitalize;"></ion-textarea>
+
+        <div *ngIf="f.submitted && observation_reason_visitTxt.invalid" class="invalid-feedback">
+          <div *ngIf="observation_reason_visitTxt.errors.required">Vendor Name</div>
+        </div>
+
+      </ion-item>
 
 
 
-    <div style="height: 20px;"></div>
+      <div style="height: 20px;"></div>
 
-    <ion-button expand="full" size="large" type="submit">
-      <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
-      Continue
-    </ion-button>
-
-
-
-  </ion-list>
-
-</form>
+      <ion-button expand="block" size="large" type="submit">
+        <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
+        Continue
+      </ion-button>
 
 
-<form name="form2" (ngSubmit)="f2.form.valid && saveProfile2()" #f2="ngForm" novalidate >
 
-  <ion-list *ngIf="!showFaceCapture && showGuestInformation">
+    </ion-list>
 
-    <ion-item>
-
-      <ion-label position="floating">Visitor Name</ion-label>
-      <ion-input type="text" placeholder="" [(ngModel)]="visitor_name"
-      name="visitor_nameTxt"  required
-      #visitor_nameTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f2.submitted && visitor_nameTxt.invalid }"
-      style="text-transform: capitalize;"></ion-input>
-
-      <div *ngIf="f2.submitted && visitor_nameTxt.invalid" class="invalid-feedback">
-        <div *ngIf="visitor_nameTxt.errors.required">Visitor Name is required</div>
-      </div>
-
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Visitor Last Name</ion-label>
-      <ion-input type="text" placeholder="" [(ngModel)]="visitor_lastname"
-      name="visitor_lastnameTxt"  required
-      #visitor_lastnameTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f2.submitted && visitor_lastnameTxt.invalid }"
-      style="text-transform: capitalize;"></ion-input>
-
-      <div *ngIf="f2.submitted && visitor_lastnameTxt.invalid" class="invalid-feedback">
-        <div *ngIf="visitor_lastnameTxt.errors.required">Visitor Last Name is required</div>
-      </div>
-
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Visitor Mobile number</ion-label>
-      <ion-input type="tel" placeholder="" [(ngModel)]="visitor_mobile_phone_number"
-      required maxlength="20" minlength="10"
-      name="visitor_mobile_phone_numberTxt"  required
-      #visitor_mobile_phone_numberTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f2.submitted && visitor_mobile_phone_numberTxt.invalid }"></ion-input>
-
-      <div *ngIf="f2.submitted && visitor_mobile_phone_numberTxt.invalid" class="invalid-feedback">
-        <div *ngIf="visitor_mobile_phone_numberTxt.errors.required">Visitor Mobile number is required</div>
-        <div *ngIf="visitor_mobile_phone_numberTxt.errors.maxlength">Max length 20</div>
-        <div *ngIf="visitor_mobile_phone_numberTxt.errors.minlength">Min length 10</div>
-      </div>
-
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Visitor Email</ion-label>
-      <ion-input type="email" placeholder="" [(ngModel)]="visitor_email"
-      name="visitor_emailTxt"  required
-      #visitor_emailTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f2.submitted && visitor_emailTxt.invalid }"
-      ></ion-input>
-
-      <div *ngIf="f2.submitted && visitor_emailTxt.invalid" class="invalid-feedback">
-        <div *ngIf="visitor_emailTxt.errors.required">Visitor Email is required</div>
-      </div>
-
-    </ion-item>
+  </form>
 
 
-    <div style="height: 20px;"></div>
+  <form name="form2" (ngSubmit)="f2.form.valid && saveDelivery()" #f2="ngForm" novalidate>
 
-    <ion-button expand="full" size="large"  type="submit">
-      <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
-      Continue
-    </ion-button>
+    <ion-list *ngIf="showGuestInformation">
 
-  </ion-list>
+      <ion-item>
+
+        <ion-label position="floating">Id</ion-label>
+        <ion-input type="text" placeholder="" [(ngModel)]="id" name="idTxt"  #idTxt="ngModel"
+           style="text-transform: capitalize;"
+          readonly></ion-input>
+
+
+      </ion-item>
+
+      <ion-item>
+
+        <ion-label position="floating">Visitor Name</ion-label>
+        <ion-input type="text" placeholder="" [(ngModel)]="visitor_name" name="visitor_nameTxt" 
+          #visitor_nameTxt="ngModel" 
+          style="text-transform: capitalize;"
+          readonly></ion-input>
+
+
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Visitor Last Name</ion-label>
+        <ion-input type="text" placeholder="" [(ngModel)]="visitor_lastname" name="visitor_lastnameTxt" 
+          #visitor_lastnameTxt="ngModel" 
+          style="text-transform: capitalize;"
+          readonly></ion-input>
+
+
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label position="floating">Sex</ion-label>
+       
+
+        <ion-input type="text" placeholder="" [(ngModel)]="sex" name="sexTxt" 
+        #sexTxt="ngModel" 
+        style="text-transform: capitalize;"
+        readonly></ion-input>
+
+
+      </ion-item>
+
+
+
+
+
+
+      <ion-item>
+        <ion-label position="floating">Address</ion-label>
+        <ion-textarea rows="4" type="text" placeholder="" [(ngModel)]="address1" name="address1Txt" 
+          #address1Txt="ngModel" 
+          style="text-transform: capitalize;"
+          readonly></ion-textarea>
+
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Date of Birth</ion-label>
+
+        <ion-input type="text" placeholder="" [(ngModel)]="dateOfBirth" name="dateOfBirthTxt" 
+        #dateOfBirthTxt="ngModel" 
+        style="text-transform: capitalize;"
+        readonly></ion-input>
+
+      </ion-item>
+
+
+
+      <div style="height: 20px;"></div>
+
+      <ion-button expand="block" size="large" type="submit">
+        <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
+        Finish
+      </ion-button>
+
+    </ion-list>
 
 
   </form>
@@ -210,14 +218,15 @@
       </ion-card-content>
     </ion-card>
 
-
+    <!--
     <ion-card style="background-color: gray;" *ngIf="option==2 || hasCaptureImage">
       <ion-card-content>
         <img [src]="_DomSanitizationService.bypassSecurityTrustUrl(imageBase64_2)" class="invitecanvas">
       </ion-card-content>
     </ion-card>
+    -->
 
-    <ion-button   color="secondary" (click)="modalCamera()">
+    <ion-button color="secondary" (click)="modalCamera()">
       <ion-icon slot="end" style="color: #fff" name="camera-outline"></ion-icon>
       <div class="font-md-17">{{option==1 ? 'Take picture of front of ID': 'Take picture of back of ID'}}</div>
     </ion-button>
@@ -225,8 +234,9 @@
 
     <div style="height: 20px;" *ngIf="hasCaptureImage"></div>
 
-    <ion-button *ngIf="hasCaptureImage" expand="full" size="large"  (click)="saveIdentification()">
-      <ion-icon slot="end" style="color: #fff" name="images-outline"></ion-icon>
+    <ion-button *ngIf="hasCaptureImage" expand="block" size="large" (click)="saveIdentification()">
+      <ion-icon slot="end" style="color: #fff" name="images-outline" *ngIf="!loading"></ion-icon>
+      <ion-spinner slot="end"  *ngIf="loading"></ion-spinner>
       <div class="font-md-17">{{textFinish}}</div>
     </ion-button>
 
@@ -254,6 +264,18 @@
     <ion-row class="font-lt-16">
       <ion-col>
         <p>Please approach the Front Desk </p>
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row class="font-lt-16">
+      <ion-col>
+        <div style="height: 20px;"></div>
+
+        <ion-button expand="full" color="secondary" fill="outline" (click)="goHome()">
+          <ion-icon slot="end" style="color: #fff" name="home"></ion-icon>
+          Home
+        </ion-button>
       </ion-col>
     </ion-row>
 

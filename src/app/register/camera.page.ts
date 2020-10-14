@@ -18,8 +18,8 @@ export class CameraPage implements OnInit, AfterViewInit {
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
-    facingMode: "environment"
-    // width: {ideal: 1024},
+    facingMode: "environment",
+     width: {ideal: 365},
     // height: {ideal: 576}
   };
   public errors: WebcamInitError[] = [];
@@ -98,5 +98,8 @@ export class CameraPage implements OnInit, AfterViewInit {
   public get nextWebcamObservable(): Observable<boolean|string> {
     return this.nextWebcam.asObservable();
   }
+
+
+  
 
 }

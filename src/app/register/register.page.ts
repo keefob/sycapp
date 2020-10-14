@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
 
 import { LoadingController, AlertController, IonInput } from '@ionic/angular';
 
@@ -9,8 +9,16 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ParameterService } from '../api/parameter.service';
 import { CameraPage } from './camera.page';
 import { DeliveryService } from '../api/delivery.service';
-import { ActivatedRoute } from '@angular/router';
-import { Observer, Observable } from 'rxjs';
+import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
+import { Observer, Observable, fromEvent } from 'rxjs';
+
+import { of } from "rxjs";
+import {
+  debounceTime,
+  map,
+  distinctUntilChanged,
+  filter
+} from "rxjs/operators";
 
 import { PopoverController } from '@ionic/angular';
 import { FilterListPage } from './filter-list.page';
@@ -20,11 +28,11 @@ import { FilterListPage } from './filter-list.page';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage implements OnInit, AfterViewInit{
 
-  showFaceCapture: boolean = false;
+  
 
-  textHeader: string = 'Apartment Information';
+  textHeader: string = '';
 
   imageBase64_1: string;
 
@@ -34,6 +42,8 @@ export class RegisterPage implements OnInit {
 
   hasCaptureImage: boolean = false;
 
+  showResident: boolean = false;
+  showFaceCapture: boolean = false;
   showGuestInformation: boolean = false;
 
   showFinish: boolean = false;
@@ -59,6 +69,21 @@ export class RegisterPage implements OnInit {
   file2;fileName2;
   observation_reason_visit;
 
+
+  id;
+  address1;
+  address2;
+  dateOfBirth;
+  sex;
+
+  loading: boolean = false;
+
+  //@ViewChild('cunit_entityEl', { static: true }) cunit_entityElInput: ElementRef;
+
+  //@ViewChild("cunitEntityElement", { read: ElementRef }) cunit_entityElInput: ElementRef;
+
+  @ViewChild('cunitEntityElement') cunit_entityElInput;  
+
   constructor(
     public alertController: AlertController,
     public loadingController: LoadingController,
@@ -67,10 +92,25 @@ export class RegisterPage implements OnInit {
     public modalController: ModalController,
     private deliveryService: DeliveryService,
     private activatedRoute: ActivatedRoute,
-    public popoverController: PopoverController) {
+    public popoverController: PopoverController,
+    private router: Router) {
+
+      /*
+      this.router.events.subscribe((e: any) => {
+				// If it is a NavigationEnd event re-initalise the component
+				if (e instanceof NavigationEnd) {
+				  this.ngOnInit();
+				}
+        });*/
+        
      }
 
+
   ngOnInit() {
+
+    console.log("se utiliza el centity: ",localStorage.getItem('centity'));
+
+    this.continueResident();
 
     this.imageBase64_1 = this.data.imageCameraBase64;
     this.imageBase64_2 = this.data.imageCameraBase64;
@@ -129,7 +169,77 @@ export class RegisterPage implements OnInit {
     //});
 
 
+    
+
   }
+
+
+  ngAfterViewInit(){
+
+    console.log("cunit_entityElInput: "+document.getElementsByName("cunit_entityTxt")[0]);
+
+
+
+    fromEvent(document.getElementsByName("cunit_entityTxt")[0], 'keyup').pipe(
+
+      // get value
+      map((event: any) => {
+        return event.target.value;
+      })
+      // if character length greater then 2
+      //, filter(res => res.length > 2)
+
+      // Time in milliseconds between key events
+      , debounceTime(800)
+
+      // If previous query is diffent from current   
+      , distinctUntilChanged()
+
+      // subscription for response
+    ).subscribe((text: string) => {
+
+
+      /*
+      this.isSearching = true;
+
+      this.searchGetCall(text).subscribe((res) => {
+        console.log('res', res);
+        this.isSearching = false;
+        this.apiResponse = res;
+      }, (err) => {
+        this.isSearching = false;
+        console.log('error', err);
+      });
+      */
+
+     this.listFilterUnitEntity = [];
+
+
+     console.log("this.unitEntityDesc eventHandler: ",text);
+
+    this.listFilterUnitEntity = this.listUnitEntity.filter(
+      (object) => {
+        //const value = object["description"].toLowerCase();
+
+        return object["description"].toLowerCase().startsWith(text.toLowerCase());
+      }
+    );
+
+    this.cunit_entity=undefined;
+
+    if(this.popoverComp!==undefined){
+      this.popoverComp.remove();
+    }
+    
+    
+    if(this.listFilterUnitEntity.length>0){
+      this.presentPopover(event);
+    }
+
+    });
+    
+  }
+  
 
   renderObservationReason: boolean = false;
 
@@ -144,6 +254,7 @@ export class RegisterPage implements OnInit {
 
   }
 
+  /*
   eventHandler(event) {
 
     this.listFilterUnitEntity = [];
@@ -158,9 +269,9 @@ export class RegisterPage implements OnInit {
 
     this.listFilterUnitEntity = this.listUnitEntity.filter(
       (object) => {
-        const value = object["description"].toLowerCase();
+        //const value = object["description"].toLowerCase();
 
-        return value.includes(cunit_entityTxt.toLowerCase());
+        return object["description"].toLowerCase().startsWith(cunit_entityTxt.toLowerCase());
       }
     );
 
@@ -175,14 +286,11 @@ export class RegisterPage implements OnInit {
       this.presentPopover(event);
     }
     
-    /*
-    if(event.keyCode==13){
-      this.presentPopover(event);
-    }
-    */
-    
 
   } 
+
+  */
+ 
 
   popoverComp: any;
 
@@ -234,14 +342,21 @@ export class RegisterPage implements OnInit {
         //let base64Image = 'data:image/jpeg;base64,' + dataReturned.data;
         if(this.option == 1){
           this.imageBase64_1 = dataReturned.data;
-          this.option = 2;
-          this.textHeader = 'Take picture of back of ID';
+          //this.option = 2;
+          //this.textHeader = 'Take picture of back of ID';
+          this.option = 1;
+          this.hasCaptureImage = true;
+          this.textFinish = "Continue"; 
         }else if(this.option == 2){
           this.imageBase64_2 = dataReturned.data;
           this.option = 1;
           this.hasCaptureImage = true;
-          this.textFinish = "Finish";
-          //this.textHeader = 'Take a Picture of your ID';
+
+          this.textFinish = "Continue"; 
+          
+
+
+
           console.log("this.showFaceCapture",this.showFaceCapture);
         }
         
@@ -263,8 +378,106 @@ export class RegisterPage implements OnInit {
     return word[0].toUpperCase() + word.substr(1).toLowerCase();
   }
 
+  goHome(){
 
-  saveProfile1() {
+    /*
+    this.textHeader = '';
+
+  this.imageBase64_1= '';
+
+  this.imageBase64_2= '';
+
+  this.successImageBase64= '';
+
+  this.hasCaptureImage =false;
+
+  this.showResident =false;
+  this.showFaceCapture= false;
+  this.showGuestInformation= false;
+
+  this.showFinish= false;
+
+  this.listUnitEntity = [];
+  this.listFilterUnitEntity = [];
+
+  this.listReasonVisit = [];
+
+  //unitEntity:any;
+  this.unitEntityDesc = "";
+
+  this.resident_name=  "";
+  this.resident_lastname=  "";
+  this.resident_email=  "";
+  this.id_reason_visit=  "";
+  this.cunit_entity=  "";
+  this.visitor_mobile_phone_number=  "";
+  this.visitor_name=  "";
+  this.visitor_lastname=  "";
+  this.visitor_email =  "";
+
+  this.file1=  "";this.fileName1 = null;
+  this.file2=  "";this.fileName2= null;
+  this.observation_reason_visit= "";;
+
+
+  this.id=  "";
+  this.address1=  "";
+  this.address2=  "";
+  this.dateOfBirth=  "";
+  this.sex= "";
+
+  this.loading= false;
+
+    this.ngOnInit();
+    this.ngAfterViewInit();
+    */
+
+    this.router.navigate(['/home'], { replaceUrl: true });
+
+  }
+
+  continueResident(){
+    this.showFaceCapture = false;
+    this.showResident=true;
+    this.showGuestInformation=false;
+    this.textHeader = "Apartment Information";
+  }
+
+  continueDeliveryCapture(){
+    
+    this.showFaceCapture = true;
+    this.showResident=false;
+    this.showGuestInformation=false;
+    this.textHeader = 'Take picture of front of ID';
+
+  }
+
+  continueDelivery(){
+
+    this.showFaceCapture = false;
+    this.showResident=false;
+    this.showGuestInformation=true;
+
+    this.textHeader = "Visitor Information";
+  }
+
+  continueFinish(){
+
+    this.showFinish = true;
+    this.showFaceCapture = true;
+    this.showResident=false;
+    this.showGuestInformation=false;
+    //this.showGuestInformation=false;
+
+    this.textHeader = "Finish";
+  }
+
+
+  saveResident() {
+    this.saveResidentInformation();
+  }
+
+  saveResidentInformation() {
 
 
     console.log("continu first",this.cunit_entity);
@@ -274,8 +487,7 @@ export class RegisterPage implements OnInit {
       return false;
     }
 
-    this.showGuestInformation = true;
-    this.textHeader = "Visitor Information";
+   
 
     if(this.id_reason_visit == 1){
       this.observation_reason_visit = null;
@@ -292,20 +504,33 @@ export class RegisterPage implements OnInit {
       this.visitor_name,
       this.visitor_lastname,
       this.visitor_email,
-      null,null,null,null,this.observation_reason_visit).subscribe(data => {
+      null,null,null,null,this.observation_reason_visit,  "0",null,null,null,null,null).subscribe(data => {
         
           console.log("data.id_visit_log",data.id_visit_log);
 
           this.id_visit_log = data.id_visit_log;
+
+          this.continueDeliveryCapture();
+
         });
 
   }
 
-  saveProfile2() {
+  
 
-    this.showFaceCapture = true;
-    //this.textHeader = 'Take a Picture of your ID';
-    this.textHeader = 'Take picture of front of ID';
+  saveIdentification() {
+
+   
+    this.saveDeliveryIdentification();
+
+    //this.showGuestInformation = true;
+
+    
+    
+
+  }
+
+  deliveryInformation() {
 
     this.deliveryService.registerVisit(
       this.id_visit_log,
@@ -318,16 +543,32 @@ export class RegisterPage implements OnInit {
       this.titleCaseWord(this.visitor_name),
       this.titleCaseWord(this.visitor_lastname),
       this.visitor_email,
-      null,null,null,null,this.observation_reason_visit).subscribe(data => {
+      null,null,null,null,this.observation_reason_visit,  "2",this.id,this.address1,null,this.dateOfBirth,this.sex).subscribe(data => {
         
           console.log("data.id_visit_log 2",data.id_visit_log);
 
           //this.id_visit_log = data.id_visit_log;
+
+          this.continueFinish();
         });
 
   }
 
-  saveIdentification() {
+
+  saveDelivery() {
+    this.deliveryInformation();
+    /*
+    this.showFinish = true;
+    this.showFaceCapture = true;
+    this.textHeader = "Finish";
+    */
+  }
+
+  
+
+  saveDeliveryIdentification() {
+
+    this.loading = true;
 
     let imageBlob1;
     let imageBlob2;
@@ -336,6 +577,7 @@ export class RegisterPage implements OnInit {
 
       imageBlob1 = data;
       let fileName1 = 'file1.' +this.getInfoFromBase64(this.imageBase64_1).extension;
+      /*
 
       this.blobFromDataURI(this.imageBase64_2).subscribe(data => {
 
@@ -343,25 +585,7 @@ export class RegisterPage implements OnInit {
         let fileName2 = 'file2.' +this.getInfoFromBase64(this.imageBase64_2).extension;
 
 
-        this.deliveryService.registerVisit(
-          this.id_visit_log,
-          this.titleCaseWord(this.resident_name),
-          this.titleCaseWord(this.resident_lastname),
-          this.resident_email,
-          this.id_reason_visit,
-          this.cunit_entity,
-          this.visitor_mobile_phone_number,
-          this.titleCaseWord(this.visitor_name),
-          this.titleCaseWord(this.visitor_lastname),
-          this.visitor_email,
-          imageBlob1,fileName1,
-          imageBlob2,fileName2,this.observation_reason_visit).subscribe(data => {
-            
-            this.showFinish = true;
-            this.showFaceCapture = true;
-            this.textHeader = "Finish";
-
-            });
+        
   
       },
       (err) => {
@@ -369,17 +593,117 @@ export class RegisterPage implements OnInit {
         console.log(err);
         
       });
+      */
+
+
+      this.deliveryService.registerVisit(
+        this.id_visit_log,
+        this.titleCaseWord(this.resident_name),
+        this.titleCaseWord(this.resident_lastname),
+        this.resident_email,
+        this.id_reason_visit,
+        this.cunit_entity,
+        this.visitor_mobile_phone_number,
+        this.titleCaseWord(this.visitor_name),
+        this.titleCaseWord(this.visitor_lastname),
+        this.visitor_email,
+        imageBlob1,fileName1,
+        null,null,this.observation_reason_visit,  "1",null,null,null,null,null).subscribe(data => {
+          
+          /*
+          this.showFinish = true;
+          this.showFaceCapture = true;
+          this.textHeader = "Finish";
+          */
+
+          console.log("registerVisit data: ",data);
+
+          if(data){
+            if(data.infoText){
+              this.visitor_name = data.infoText?.name;
+              this.visitor_lastname = data.infoText?.lastname;
+
+              this.id = data.infoText?.id;
+
+              let addressF = "";
+
+              if(data.infoText?.address1){
+                addressF = addressF + data.infoText?.address1;
+                if(data.infoText?.address2){
+                  addressF = addressF + ' '+data.infoText?.address2;
+                }
+              }
+
+              this.address1 = addressF;
+              this.dateOfBirth = data.infoText?.dateOfBirth ;
+              //this.dateOfBirth = data.infoText?.dateOfBirth ? this.getDateStringFromDate(data.infoText?.dateOfBirth) : '';
+              this.sex = data.infoText?.sex;
+
+
+              /*
+              "id": "DLN C632-423-78-064-0",
+              "address1": "9701 BRICKELL KEY BLVD APT 1505",
+              "address2": "MAMI FL 33131-2679",
+              "dateOfBirth": "02/24/1978",
+              "sex": "M",*/
+              
+            }
+          }
+            
+          
+          this.continueDelivery();
+          
+            this.loading = false;
+
+          },(err) => {
+            //this.error = err 
+            console.log(err);
+      
+            this.loading = false;
+            
+          });
 
 
     },
     (err) => {
       //this.error = err 
       console.log(err);
+
+      this.loading = false;
       
     });
 
 
 
+  }
+
+  
+
+  getDateStringFromDate(dateInStr: any): string {
+
+    if (dateInStr && dateInStr.length > 0) {
+      const dateParts = dateInStr.trim().split('/');
+      if(dateParts.length> 1){
+        const month = this.toInteger(dateParts[0]);
+        const day = this.toInteger(dateParts[1]);
+        const year = this.toInteger(dateParts[2]);
+        return `${year}-${month}-${day}`;
+      }
+
+      const dateParts2 = dateInStr.trim().split('-');
+      if(dateParts2.length> 1){
+        const month = this.toInteger(dateParts2[0]);
+        const day = this.toInteger(dateParts2[1]);
+        const year = this.toInteger(dateParts2[2]);
+        return `${year}-${month}-${day}`;
+      }
+      
+    }
+
+  }
+
+  toInteger(value: any): number {
+    return parseInt(`${value}`, 10);
   }
 
   blobFromDataURI(base64): Observable<Blob> {
@@ -422,6 +746,11 @@ export class RegisterPage implements OnInit {
       meta,
       rawBase64
     };
+  }
+
+
+  ionViewWillLeave (){
+    console.log("nos fuimos de register page, lo voy a limpiar");
   }
 
 
