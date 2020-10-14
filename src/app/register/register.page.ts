@@ -510,7 +510,8 @@ export class RegisterPage implements OnInit, AfterViewInit{
 
           this.id_visit_log = data.id_visit_log;
 
-          this.continueDeliveryCapture();
+          //this.continueDeliveryCapture();
+          this.continueDelivery();
 
         });
 
@@ -549,7 +550,8 @@ export class RegisterPage implements OnInit, AfterViewInit{
 
           //this.id_visit_log = data.id_visit_log;
 
-          this.continueFinish();
+          this.continueDeliveryCapture();
+          //this.continueFinish();
         });
 
   }
@@ -609,15 +611,10 @@ export class RegisterPage implements OnInit, AfterViewInit{
         this.visitor_email,
         imageBlob1,fileName1,
         null,null,this.observation_reason_visit,  "1",null,null,null,null,null).subscribe(data => {
-          
-          /*
-          this.showFinish = true;
-          this.showFaceCapture = true;
-          this.textHeader = "Finish";
-          */
 
           console.log("registerVisit data: ",data);
 
+          /*
           if(data){
             if(data.infoText){
               this.visitor_name = data.infoText?.name;
@@ -638,20 +635,15 @@ export class RegisterPage implements OnInit, AfterViewInit{
               this.dateOfBirth = data.infoText?.dateOfBirth ;
               //this.dateOfBirth = data.infoText?.dateOfBirth ? this.getDateStringFromDate(data.infoText?.dateOfBirth) : '';
               this.sex = data.infoText?.sex;
-
-
-              /*
-              "id": "DLN C632-423-78-064-0",
-              "address1": "9701 BRICKELL KEY BLVD APT 1505",
-              "address2": "MAMI FL 33131-2679",
-              "dateOfBirth": "02/24/1978",
-              "sex": "M",*/
               
             }
           }
+          */
             
           
-          this.continueDelivery();
+            //this.continueDelivery();
+
+            this.continueFinish();
           
             this.loading = false;
 

@@ -125,15 +125,20 @@
 
     <ion-list *ngIf="showGuestInformation">
 
+      <!--
       <ion-item>
 
         <ion-label position="floating">Id</ion-label>
         <ion-input type="text" placeholder="" [(ngModel)]="id" name="idTxt"  #idTxt="ngModel"
            style="text-transform: capitalize;"
-          readonly></ion-input>
+          ></ion-input>
 
-
+          <div *ngIf="f2.submitted && idTxt.invalid" class="invalid-feedback">
+            <div *ngIf="idTxt.errors.required">Id</div>
+          </div>
       </ion-item>
+
+      -->
 
       <ion-item>
 
@@ -141,8 +146,12 @@
         <ion-input type="text" placeholder="" [(ngModel)]="visitor_name" name="visitor_nameTxt" 
           #visitor_nameTxt="ngModel" 
           style="text-transform: capitalize;"
-          readonly></ion-input>
+          ></ion-input>
 
+
+          <div *ngIf="f2.submitted && visitor_nameTxt.invalid" class="invalid-feedback">
+            <div *ngIf="visitor_nameTxt.errors.required">Visitor Name</div>
+          </div>
 
       </ion-item>
 
@@ -151,12 +160,15 @@
         <ion-input type="text" placeholder="" [(ngModel)]="visitor_lastname" name="visitor_lastnameTxt" 
           #visitor_lastnameTxt="ngModel" 
           style="text-transform: capitalize;"
-          readonly></ion-input>
+          ></ion-input>
 
+          <div *ngIf="f2.submitted && visitor_lastnameTxt.invalid" class="invalid-feedback">
+            <div *ngIf="visitor_lastnameTxt.errors.required">Visitor Last Name</div>
+          </div>
 
       </ion-item>
 
-
+      <!--
       <ion-item>
         <ion-label position="floating">Sex</ion-label>
        
@@ -164,8 +176,11 @@
         <ion-input type="text" placeholder="" [(ngModel)]="sex" name="sexTxt" 
         #sexTxt="ngModel" 
         style="text-transform: capitalize;"
-        readonly></ion-input>
+        ></ion-input>
 
+        <div *ngIf="f2.submitted && sexTxt.invalid" class="invalid-feedback">
+          <div *ngIf="sexTxt.errors.required">Sex</div>
+        </div>
 
       </ion-item>
 
@@ -193,13 +208,13 @@
 
       </ion-item>
 
-
+      -->
 
       <div style="height: 20px;"></div>
 
       <ion-button expand="block" size="large" type="submit">
         <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
-        Finish
+        Continue
       </ion-button>
 
     </ion-list>
