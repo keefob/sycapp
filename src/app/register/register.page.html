@@ -16,28 +16,12 @@
     <ion-list *ngIf="showResident">
 
 
+      <!--
       <ion-item>
         <ion-label position="floating">Search Apartment #</ion-label>
 
-        <!--
-      <ion-select placeholder="Select One" interface="action-sheet" [(ngModel)]="cunit_entity"
-      name="cunit_entityTxt"  required
-      #cunit_entityTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f.submitted && cunit_entityTxt.invalid }">
-        <ion-select-option value="{{ unity.cunitEntity }}" *ngFor="let unity of listUnitEntity">{{unity.description}}
-        </ion-select-option>
-      </ion-select>
-      -->
-
-        <!--
-      <ion-input
-      #cunit_entityEl
-       type="search" [(ngModel)]="unitEntityDesc"
-      name="cunit_entityTxt"  required
-      #cunit_entityTxt="ngModel"
-      [ngClass]="{ 'is-invalid': f.submitted && cunit_entityTxt.invalid }"
-      (keyup)="eventHandler($event)"></ion-input>
-      -->
+        
+      
 
         <ion-input #cunit_entityEl type="search" [(ngModel)]="unitEntityDesc" name="cunit_entityTxt" required
           #cunit_entityTxt="ngModel" [ngClass]="{ 'is-invalid': f.submitted && cunit_entityTxt.invalid }"></ion-input>
@@ -48,37 +32,38 @@
 
 
       </ion-item>
+      -->
 
 
       <ion-item>
 
-        <ion-label position="floating">Resident First Name</ion-label>
+        <ion-label position="floating">{{ 'REGISTER.LABEL_FIRSTNAME' | translate }}</ion-label>
         <ion-input type="text" [(ngModel)]="resident_name" name="resident_nameTxt" required #resident_nameTxt="ngModel"
           [ngClass]="{ 'is-invalid': f.submitted && resident_nameTxt.invalid }" style="text-transform: capitalize;">
         </ion-input>
 
         <div *ngIf="f.submitted && resident_nameTxt.invalid" class="invalid-feedback">
-          <div *ngIf="resident_nameTxt.errors.required">Resident First Name is required</div>
+          <div *ngIf="resident_nameTxt.errors.required">{{ 'REGISTER.REQUIRED_FIRSTNAME' | translate }}</div>
         </div>
 
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Resident Last Name</ion-label>
-        <ion-input type="text" placeholder="" [(ngModel)]="resident_lastname" name="resident_lastnameTxt" required
+        <ion-label position="floating">{{ 'REGISTER.LABEL_LASTNAME' | translate }}</ion-label>
+        <ion-input type="text" placeholder="" [(ngModel)]="resident_lastname" name="resident_lastnameTxt" 
           #resident_lastnameTxt="ngModel" [ngClass]="{ 'is-invalid': f.submitted && resident_lastnameTxt.invalid }"
           style="text-transform: capitalize;"></ion-input>
 
         <div *ngIf="f.submitted && resident_lastnameTxt.invalid" class="invalid-feedback">
-          <div *ngIf="resident_lastnameTxt.errors.required">Resident Last Name is required</div>
+          <div *ngIf="resident_lastnameTxt.errors.required">{{ 'REGISTER.REQUIRED_LASTNAME' | translate }}</div>
         </div>
 
       </ion-item>
 
 
       <ion-item>
-        <ion-label position="floating">Select Reason of Your Visit</ion-label>
-        <ion-select placeholder="Select One" [(ngModel)]="id_reason_visit" name="id_reason_visitTxt" required
+        <ion-label position="floating">{{ 'REGISTER.LABEL_REASONVISIT' | translate }}</ion-label>
+        <ion-select placeholder="{{ 'GLOBAL.SELECT' | translate }}" [(ngModel)]="id_reason_visit" name="id_reason_visitTxt" required
           #id_reason_visitTxt="ngModel" [ngClass]="{ 'is-invalid': f.submitted && id_reason_visitTxt.invalid }"
           (ionChange)="changeReasonVisit()">
           <ion-select-option value="{{ reason.idReasonVisit }}" *ngFor="let reason of listReasonVisit">
@@ -87,20 +72,20 @@
         </ion-select>
 
         <div *ngIf="f.submitted && id_reason_visitTxt.invalid" class="invalid-feedback">
-          <div *ngIf="id_reason_visitTxt.errors.required">Reason of Your Visit is required</div>
+          <div *ngIf="id_reason_visitTxt.errors.required">{{ 'REGISTER.REQUIRED_REASONVISIT' | translate }}</div>
         </div>
 
       </ion-item>
 
       <ion-item *ngIf="renderObservationReason">
-        <ion-label position="floating">Vendor Name</ion-label>
+        <ion-label position="floating">{{ 'REGISTER.LABEL_VENDORNAME' | translate }}</ion-label>
         <ion-textarea type="text" placeholder="" [(ngModel)]="observation_reason_visit"
           name="observation_reason_visitTxt" required #observation_reason_visitTxt="ngModel"
           [ngClass]="{ 'is-invalid': f.submitted && observation_reason_visitTxt.invalid }"
           style="text-transform: capitalize;"></ion-textarea>
 
         <div *ngIf="f.submitted && observation_reason_visitTxt.invalid" class="invalid-feedback">
-          <div *ngIf="observation_reason_visitTxt.errors.required">Vendor Name</div>
+          <div *ngIf="observation_reason_visitTxt.errors.required">{{ 'REGISTER.REQUIRED_VENDORNAME' | translate }}</div>
         </div>
 
       </ion-item>
@@ -111,7 +96,7 @@
 
       <ion-button expand="block" size="large" type="submit">
         <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
-        Continue
+        {{ 'REGISTER.BTN_CONTINUE' | translate }}
       </ion-button>
 
 
@@ -125,24 +110,24 @@
 
     <ion-list *ngIf="showGuestInformation">
 
-      <!--
+      
       <ion-item>
 
-        <ion-label position="floating">Id</ion-label>
+        <ion-label position="floating">{{ 'REGISTER.LABEL_ID' | translate }}</ion-label>
         <ion-input type="text" placeholder="" [(ngModel)]="id" name="idTxt"  #idTxt="ngModel"
            style="text-transform: capitalize;"
           ></ion-input>
 
           <div *ngIf="f2.submitted && idTxt.invalid" class="invalid-feedback">
-            <div *ngIf="idTxt.errors.required">Id</div>
+            <div *ngIf="idTxt.errors.required">{{ 'REGISTER.REQUIRED_ID' | translate }}</div>
           </div>
       </ion-item>
 
-      -->
+      
 
       <ion-item>
 
-        <ion-label position="floating">Visitor Name</ion-label>
+        <ion-label position="floating">{{ 'REGISTER.LABEL_VISITORNAME' | translate }}</ion-label>
         <ion-input type="text" placeholder="" [(ngModel)]="visitor_name" name="visitor_nameTxt" 
           #visitor_nameTxt="ngModel" 
           style="text-transform: capitalize;"
@@ -150,27 +135,27 @@
 
 
           <div *ngIf="f2.submitted && visitor_nameTxt.invalid" class="invalid-feedback">
-            <div *ngIf="visitor_nameTxt.errors.required">Visitor Name</div>
+            <div *ngIf="visitor_nameTxt.errors.required">{{ 'REGISTER.REQUIRED_VISITORNAME' | translate }}</div>
           </div>
 
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Visitor Last Name</ion-label>
+        <ion-label position="floating">{{ 'REGISTER.LABEL_VISITORLASTNAME' | translate }}</ion-label>
         <ion-input type="text" placeholder="" [(ngModel)]="visitor_lastname" name="visitor_lastnameTxt" 
           #visitor_lastnameTxt="ngModel" 
           style="text-transform: capitalize;"
           ></ion-input>
 
           <div *ngIf="f2.submitted && visitor_lastnameTxt.invalid" class="invalid-feedback">
-            <div *ngIf="visitor_lastnameTxt.errors.required">Visitor Last Name</div>
+            <div *ngIf="visitor_lastnameTxt.errors.required">{{ 'REGISTER.REQUIRED_VISITORLASTNAME' | translate }}</div>
           </div>
 
       </ion-item>
 
-      <!--
+      
       <ion-item>
-        <ion-label position="floating">Sex</ion-label>
+        <ion-label position="floating">{{ 'REGISTER.LABEL_SEX' | translate }}</ion-label>
        
 
         <ion-input type="text" placeholder="" [(ngModel)]="sex" name="sexTxt" 
@@ -179,7 +164,7 @@
         ></ion-input>
 
         <div *ngIf="f2.submitted && sexTxt.invalid" class="invalid-feedback">
-          <div *ngIf="sexTxt.errors.required">Sex</div>
+          <div *ngIf="sexTxt.errors.required">{{ 'REGISTER.REQUIRED_SEX' | translate }}</div>
         </div>
 
       </ion-item>
@@ -187,14 +172,18 @@
 
 
 
-
+      <!--
 
       <ion-item>
         <ion-label position="floating">Address</ion-label>
         <ion-textarea rows="4" type="text" placeholder="" [(ngModel)]="address1" name="address1Txt" 
           #address1Txt="ngModel" 
           style="text-transform: capitalize;"
-          readonly></ion-textarea>
+          ></ion-textarea>
+
+          <div *ngIf="f2.submitted && address1Txt.invalid" class="invalid-feedback">
+            <div *ngIf="address1Txt.errors.required">Sex</div>
+          </div>
 
       </ion-item>
 
@@ -204,17 +193,23 @@
         <ion-input type="text" placeholder="" [(ngModel)]="dateOfBirth" name="dateOfBirthTxt" 
         #dateOfBirthTxt="ngModel" 
         style="text-transform: capitalize;"
-        readonly></ion-input>
+        ></ion-input>
+
+        <div *ngIf="f2.submitted && dateOfBirthTxt.invalid" class="invalid-feedback">
+          <div *ngIf="dateOfBirthTxt.errors.required">Sex</div>
+        </div>
 
       </ion-item>
 
       -->
 
+      
+
       <div style="height: 20px;"></div>
 
       <ion-button expand="block" size="large" type="submit">
         <ion-icon slot="end" style="color: #fff" name="person-add-outline"></ion-icon>
-        Continue
+        {{ 'REGISTER.BTN_CONTINUE' | translate }}
       </ion-button>
 
     </ion-list>
@@ -226,6 +221,8 @@
   <ion-list class="ion-text-center" *ngIf="showFaceCapture && !showFinish">
 
     <!-- primera imagen camara de fondo-->
+
+    
 
     <ion-card style="background-color: gray;" *ngIf="option==1 || hasCaptureImage">
       <ion-card-content>
@@ -241,10 +238,7 @@
     </ion-card>
     -->
 
-    <ion-button color="secondary" (click)="modalCamera()">
-      <ion-icon slot="end" style="color: #fff" name="camera-outline"></ion-icon>
-      <div class="font-md-17">{{option==1 ? 'Take picture of front of ID': 'Take picture of back of ID'}}</div>
-    </ion-button>
+    
 
 
     <div style="height: 20px;" *ngIf="hasCaptureImage"></div>
@@ -255,6 +249,11 @@
       <div class="font-md-17">{{textFinish}}</div>
     </ion-button>
 
+    <ion-button color="secondary" (click)="modalCamera()">
+      <ion-icon slot="end" style="color: #fff" name="camera-outline"></ion-icon>
+      <div class="font-md-17">{{option==1 ? textTakePhoto: 'Take picture of back of ID'}}</div>
+    </ion-button>
+
 
   </ion-list>
 
@@ -263,23 +262,28 @@
     <ion-row>
 
       <ion-col>
-        <div>
-          <img height="200" [src]="_DomSanitizationService.bypassSecurityTrustUrl(successImageBase64)" />
+
+        <ngx-qrcode
+          [elementType]="elementType"
+          [errorCorrectionLevel]="correctionLevel"
+          [value]="valueQR"
+          alt="QR Code"
+          cssClass="bshadow"></ngx-qrcode>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col>
+        <div style="height: 30px;">
+          <img height="50" [src]="_DomSanitizationService.bypassSecurityTrustUrl(successImageBase64)" />
         </div>
+        <p style="height: 10px;"> {{ 'REGISTER.SUCCESS' | translate }}</p>
+        <p style="height: 10px;"> {{ 'REGISTER.MSG_APPROACH' | translate }} </p>
       </ion-col>
 
-    </ion-row>
-
-    <ion-row class="font-lt-16">
-      <ion-col>
-        <p>Registration Success</p>
-      </ion-col>
-    </ion-row>
-
-    <ion-row class="font-lt-16">
-      <ion-col>
-        <p>Please approach the Front Desk </p>
-      </ion-col>
     </ion-row>
 
 
@@ -289,7 +293,7 @@
 
         <ion-button expand="full" color="secondary" fill="outline" (click)="goHome()">
           <ion-icon slot="end" style="color: #fff" name="home"></ion-icon>
-          Home
+          {{ 'REGISTER.GO_HOME' | translate }}
         </ion-button>
       </ion-col>
     </ion-row>

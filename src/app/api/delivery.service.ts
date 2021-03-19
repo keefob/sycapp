@@ -128,7 +128,9 @@ export class DeliveryService {
     formdata.append("ccompany", "1");
     formdata.append("resident_name", resident_name);
     formdata.append("resident_lastname", resident_lastname);
-    formdata.append("id_reason_visit", id_reason_visit);
+    if(id_reason_visit!=0){
+      formdata.append("id_reason_visit", id_reason_visit);
+    }
     formdata.append("cunit_entity", cunit_entity);
     formdata.append("visitor_mobile_phone_number", visitor_mobile_phone_number);
     formdata.append("visitor_name", visitor_name);

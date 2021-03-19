@@ -31,3 +31,5 @@ npm-debug.log*
 /www
 /delivery
 delivery.zip
+/delivery-dev
+delivery-dev.zip

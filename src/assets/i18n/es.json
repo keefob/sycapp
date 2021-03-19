@@ -1,0 +1,70 @@
+{
+    "GLOBAL": {
+        "ALERT_TITLE": "Alerta",
+        "PHOTO_TITLE": "Tomando foto ...",
+        "PHOTO_UPLOAD": "Uploading face for registration ...",
+        "PHOTO_UPLOAD_FACE": " Uploading image for face recognition ...",
+        "SELECT": "Seleccionar"
+    },
+    "HOME": {
+        "TITLE": "Bienvenido",
+        "VIEW_PROFILE": "Inicio",
+        "BTN_CONTINUE": "Continuar",
+        "SELECT_APARMENT_PLACEHOLDER": "Seleccione el apartamento que busca"
+        
+    },
+    "CAMERA": {
+        "TITLE": "Camara",
+        "BTN_CONTINUE": "Tomar foto de la identificación"
+        
+    },
+    "REGISTER": {
+        
+        "LABEL_FIRSTNAME": "Nombre del residente",
+        "REQUIRED_FIRSTNAME": "Nombre del residente es requerido",
+        "LABEL_LASTNAME": "Apellido del residente",
+        "REQUIRED_LASTNAME": "Apellido del residente es requerido",
+        "LABEL_REASONVISIT": "Seleccione el motivo de su visita",
+        "REQUIRED_REASONVISIT": "Motivo de su visita es requerido",
+        "LABEL_VENDORNAME": "Nombre del vendedor",
+        "REQUIRED_VENDORNAME": "Nombre del vendedor es requerido",
+
+        "LABEL_ID": "Identificación",
+        "REQUIRED_ID": "Identificación es requerido",
+
+        "LABEL_VISITORNAME": "Nombre visitante",
+        "REQUIRED_VISITORNAME": "Nombre visitante es requerido",
+
+        "LABEL_VISITORLASTNAME": "Apellido visitante",
+        "REQUIRED_VISITORLASTNAME": "Apellido visitante is required",
+
+        "LABEL_SEX": "Sexo",
+        "REQUIRED_SEX": "Sexo es requerido",
+
+
+        "SUCCESS": "Registro exitoso",
+
+        "MSG_APPROACH": "Acérquese a la recepción",
+
+        "GO_HOME": "Inicio",
+
+
+        "FINISH": "Confirmar y Continuar",
+
+        "PHOTO": "Tomar foto de la identificación",
+
+        "RE_PHOTO": "Tomar otra vez la foto ",
+
+
+        "TITLE_APARMENT" : "Información del apartamento",
+
+        "TITLE_PHOTO" : "Tomar foto de la identificación",
+
+        "TITLE_VISITOR" : "Información del visitante",
+
+        "TITLE_FINISH" : "Finalizar",
+        
+        "BTN_CONTINUE": "Continuar"
+    }
+
+}

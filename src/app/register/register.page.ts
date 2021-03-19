@@ -22,6 +22,10 @@ import {
 
 import { PopoverController } from '@ionic/angular';
 import { FilterListPage } from './filter-list.page';
+import { TranslateService } from '@ngx-translate/core';
+//import { stringify } from 'querystring';
+
+import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 
 @Component({
   selector: 'app-register',
@@ -76,6 +80,8 @@ export class RegisterPage implements OnInit, AfterViewInit{
   dateOfBirth;
   sex;
 
+  imageBlob1;
+
   loading: boolean = false;
 
   //@ViewChild('cunit_entityEl', { static: true }) cunit_entityElInput: ElementRef;
@@ -83,6 +89,19 @@ export class RegisterPage implements OnInit, AfterViewInit{
   //@ViewChild("cunitEntityElement", { read: ElementRef }) cunit_entityElInput: ElementRef;
 
   @ViewChild('cunitEntityElement') cunit_entityElInput;  
+
+  paramShowVisitorInformation: boolean = false;
+
+  titleAlert: string;
+
+  titleAparment:string;
+  titlePhoto:string;
+  titleVisitor:string;
+  titleFinish:string;
+
+  elementType = NgxQrcodeElementTypes.URL;
+  correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
+  valueQR = '';
 
   constructor(
     public alertController: AlertController,
@@ -93,7 +112,8 @@ export class RegisterPage implements OnInit, AfterViewInit{
     private deliveryService: DeliveryService,
     private activatedRoute: ActivatedRoute,
     public popoverController: PopoverController,
-    private router: Router) {
+    private router: Router,
+    private translate: TranslateService) {
 
       /*
       this.router.events.subscribe((e: any) => {
@@ -102,6 +122,52 @@ export class RegisterPage implements OnInit, AfterViewInit{
 				  this.ngOnInit();
 				}
         });*/
+
+
+        translate.get('GLOBAL.ALERT_TITLE').subscribe((res: string) => {
+          console.log("GLOBAL.ALERT_TITLE: "+res);
+          this.titleAlert = res;
+        });
+
+        translate.get('GLOBAL.ALERT_TITLE').subscribe((res: string) => {
+          console.log("GLOBAL.ALERT_TITLE: "+res);
+          this.titleAlert = res;
+        });
+
+
+        translate.get('REGISTER.FINISH').subscribe((res: string) => {
+          console.log("REGISTER.FINISH: "+res);
+          this.textFinish = res;
+        });
+
+        translate.get('REGISTER.PHOTO').subscribe((res: string) => {
+          console.log("REGISTER.PHOTO: "+res);
+          this.textTakePhoto = res;
+        });
+
+
+
+        translate.get('REGISTER.TITLE_APARMENT').subscribe((res: string) => {
+          console.log("REGISTER.TITLE_APARMENT: "+res);
+          this.titleAparment = res;
+        });
+
+        translate.get('REGISTER.TITLE_PHOTO').subscribe((res: string) => {
+          console.log("REGISTER.TITLE_PHOTO: "+res);
+          this.titlePhoto = res;
+        });
+
+        translate.get('REGISTER.TITLE_VISITOR').subscribe((res: string) => {
+          console.log("REGISTER.TITLE_VISITOR: "+res);
+          this.titleVisitor = res;
+        });
+
+        translate.get('REGISTER.TITLE_FINISH').subscribe((res: string) => {
+          console.log("REGISTER.TITLE_FINISH: "+res);
+          this.titleFinish = res;
+        });
+
+        
         
      }
 
@@ -110,9 +176,23 @@ export class RegisterPage implements OnInit, AfterViewInit{
 
     console.log("se utiliza el centity: ",localStorage.getItem('centity'));
 
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      const id = params.id;
+      this.id_visit_log= params.id;
+      this.cunit_entity=params.cunit_entity;
+
+      console.log("id_visit_log: "+this.id_visit_log);
+      console.log("cunit_entity: "+this.cunit_entity);
+      
+
+
+    });
+
     this.continueResident();
 
-    this.imageBase64_1 = this.data.imageCameraBase64;
+    //this.imageBase64_1 = this.data.imageCameraBase64;
+    this.imageBase64_1 = this.data.imageLicenseBase64;
     this.imageBase64_2 = this.data.imageCameraBase64;
     this.successImageBase64 = this.data.successImageBase64;
 
@@ -176,6 +256,8 @@ export class RegisterPage implements OnInit, AfterViewInit{
 
   ngAfterViewInit(){
 
+
+    /*
     console.log("cunit_entityElInput: "+document.getElementsByName("cunit_entityTxt")[0]);
 
 
@@ -198,19 +280,6 @@ export class RegisterPage implements OnInit, AfterViewInit{
       // subscription for response
     ).subscribe((text: string) => {
 
-
-      /*
-      this.isSearching = true;
-
-      this.searchGetCall(text).subscribe((res) => {
-        console.log('res', res);
-        this.isSearching = false;
-        this.apiResponse = res;
-      }, (err) => {
-        this.isSearching = false;
-        console.log('error', err);
-      });
-      */
 
      this.listFilterUnitEntity = [];
 
@@ -237,6 +306,7 @@ export class RegisterPage implements OnInit, AfterViewInit{
     }
 
     });
+    */
     
   }
   
@@ -321,7 +391,7 @@ export class RegisterPage implements OnInit, AfterViewInit{
     return await this.popoverComp.present();
   }
 
-  
+  facingMode: string;
 
   async modalCamera() {
 
@@ -330,23 +400,46 @@ export class RegisterPage implements OnInit, AfterViewInit{
     const modal = await this.modalController.create({
       component: CameraPage,
       componentProps: {
-        'option': this.option
+        'option': this.facingMode
       }
     });
 
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned !== null) {
         //let imageBase64 = dataReturned.data;
-        //console.log('Return Data modalCamera:'+ dataReturnedLoad);
+        console.log('Return Data modalCamera:', dataReturned);
+
+        /*
+        if(dataReturned.data){
+          if(dataReturned.data.type){
+            this.facingMode = dataReturned.data.facingMode;
+            //this.modalCamera();
+          }
+          
+        }
+        */
 
         //let base64Image = 'data:image/jpeg;base64,' + dataReturned.data;
-        if(this.option == 1){
+        if(this.option == 0){
           this.imageBase64_1 = dataReturned.data;
           //this.option = 2;
           //this.textHeader = 'Take picture of back of ID';
           this.option = 1;
           this.hasCaptureImage = true;
-          this.textFinish = "Continue"; 
+          this.textFinish = "Confirm & Continue"; 
+          //textTakePhoto: string = "Take picture of front of ID";
+          this.textTakePhoto = "Re-Take picture of front of ID";
+
+          this.translate.get('REGISTER.FINISH').subscribe((res: string) => {
+            console.log("REGISTER.FINISH: "+res);
+            this.textFinish = res;
+          });
+
+          this.translate.get('REGISTER.RE_PHOTO').subscribe((res: string) => {
+            console.log("REGISTER.RE_PHOTO: "+res);
+            this.textTakePhoto = res;
+          });
+
         }else if(this.option == 2){
           this.imageBase64_2 = dataReturned.data;
           this.option = 1;
@@ -367,9 +460,11 @@ export class RegisterPage implements OnInit, AfterViewInit{
     return await modal.present();
   }
 
-  option: number = 1;
+  option: number = 0;
 
   textFinish: string = "Capture another side";
+
+  textTakePhoto: string = "Take picture of front of ID";
 
   id_visit_log: number;
 
@@ -380,58 +475,6 @@ export class RegisterPage implements OnInit, AfterViewInit{
 
   goHome(){
 
-    /*
-    this.textHeader = '';
-
-  this.imageBase64_1= '';
-
-  this.imageBase64_2= '';
-
-  this.successImageBase64= '';
-
-  this.hasCaptureImage =false;
-
-  this.showResident =false;
-  this.showFaceCapture= false;
-  this.showGuestInformation= false;
-
-  this.showFinish= false;
-
-  this.listUnitEntity = [];
-  this.listFilterUnitEntity = [];
-
-  this.listReasonVisit = [];
-
-  //unitEntity:any;
-  this.unitEntityDesc = "";
-
-  this.resident_name=  "";
-  this.resident_lastname=  "";
-  this.resident_email=  "";
-  this.id_reason_visit=  "";
-  this.cunit_entity=  "";
-  this.visitor_mobile_phone_number=  "";
-  this.visitor_name=  "";
-  this.visitor_lastname=  "";
-  this.visitor_email =  "";
-
-  this.file1=  "";this.fileName1 = null;
-  this.file2=  "";this.fileName2= null;
-  this.observation_reason_visit= "";;
-
-
-  this.id=  "";
-  this.address1=  "";
-  this.address2=  "";
-  this.dateOfBirth=  "";
-  this.sex= "";
-
-  this.loading= false;
-
-    this.ngOnInit();
-    this.ngAfterViewInit();
-    */
-
     this.router.navigate(['/home'], { replaceUrl: true });
 
   }
@@ -440,7 +483,7 @@ export class RegisterPage implements OnInit, AfterViewInit{
     this.showFaceCapture = false;
     this.showResident=true;
     this.showGuestInformation=false;
-    this.textHeader = "Apartment Information";
+    this.textHeader = this.titleAparment;
   }
 
   continueDeliveryCapture(){
@@ -448,7 +491,7 @@ export class RegisterPage implements OnInit, AfterViewInit{
     this.showFaceCapture = true;
     this.showResident=false;
     this.showGuestInformation=false;
-    this.textHeader = 'Take picture of front of ID';
+    this.textHeader = this.titlePhoto;
 
   }
 
@@ -458,7 +501,7 @@ export class RegisterPage implements OnInit, AfterViewInit{
     this.showResident=false;
     this.showGuestInformation=true;
 
-    this.textHeader = "Visitor Information";
+    this.textHeader = this.titleVisitor;
   }
 
   continueFinish(){
@@ -469,7 +512,7 @@ export class RegisterPage implements OnInit, AfterViewInit{
     this.showGuestInformation=false;
     //this.showGuestInformation=false;
 
-    this.textHeader = "Finish";
+    this.textHeader = this.titleFinish;
   }
 
 
@@ -480,38 +523,54 @@ export class RegisterPage implements OnInit, AfterViewInit{
   saveResidentInformation() {
 
 
+    /*
+
     console.log("continu first",this.cunit_entity);
 
     if(this.cunit_entity==undefined){
       this.unitEntityDesc="";
       return false;
     }
-
+*/
    
 
     if(this.id_reason_visit == 1){
-      this.observation_reason_visit = null;
+      this.observation_reason_visit = "";
     }
 
     this.deliveryService.registerVisit(
-      "",
+      //"",
+      this.id_visit_log,
       this.titleCaseWord(this.resident_name),
       this.titleCaseWord(this.resident_lastname),
-      this.resident_email,
+      "",//      this.resident_email,
       this.id_reason_visit,
       this.cunit_entity,
-      this.visitor_mobile_phone_number,
-      this.visitor_name,
-      this.visitor_lastname,
-      this.visitor_email,
-      null,null,null,null,this.observation_reason_visit,  "0",null,null,null,null,null).subscribe(data => {
+      "",//visitor
+      "",//visitor
+      "",//visitor
+      "",//visitor
+      null,null,null,null,
+      this.observation_reason_visit ?  this.observation_reason_visit : ""
+      ,  "0",
+      //null,null,null,null,null
+      "","","","",""
+      ).subscribe(data => {
         
           console.log("data.id_visit_log",data.id_visit_log);
 
           this.id_visit_log = data.id_visit_log;
 
-          //this.continueDeliveryCapture();
-          this.continueDelivery();
+          this.valueQR=data.token;
+
+          this.continueDeliveryCapture();
+          //this.textTakePhoto = "Take picture of front of ID";
+
+          this.textTakePhoto = this.titlePhoto;
+
+          this.modalCamera();
+          
+          //this.continueDelivery();
 
         });
 
@@ -544,14 +603,23 @@ export class RegisterPage implements OnInit, AfterViewInit{
       this.titleCaseWord(this.visitor_name),
       this.titleCaseWord(this.visitor_lastname),
       this.visitor_email,
-      null,null,null,null,this.observation_reason_visit,  "2",this.id,this.address1,null,this.dateOfBirth,this.sex).subscribe(data => {
+      this.imageBlob1,this.fileName1,
+        "","",
+      this.observation_reason_visit,  
+      "2",
+      this.id,
+      "",//this.address1,
+      "",
+      "",//this.dateOfBirth,
+      this.sex
+      ).subscribe(data => {
         
           console.log("data.id_visit_log 2",data.id_visit_log);
 
           //this.id_visit_log = data.id_visit_log;
 
-          this.continueDeliveryCapture();
-          //this.continueFinish();
+          //this.continueDeliveryCapture();
+          this.continueFinish();
         });
 
   }
@@ -596,25 +664,30 @@ export class RegisterPage implements OnInit, AfterViewInit{
         
       });
       */
-
+     this.imageBlob1=imageBlob1;
+     this.fileName1= fileName1;
 
       this.deliveryService.registerVisit(
         this.id_visit_log,
         this.titleCaseWord(this.resident_name),
         this.titleCaseWord(this.resident_lastname),
-        this.resident_email,
+        this.resident_email ? this.resident_email : "",
         this.id_reason_visit,
         this.cunit_entity,
-        this.visitor_mobile_phone_number,
-        this.titleCaseWord(this.visitor_name),
-        this.titleCaseWord(this.visitor_lastname),
-        this.visitor_email,
+        "",//this.visitor_mobile_phone_number,
+        "",//this.titleCaseWord(this.visitor_name),
+        "",//this.titleCaseWord(this.visitor_lastname),
+        "",//this.visitor_email,
         imageBlob1,fileName1,
-        null,null,this.observation_reason_visit,  "1",null,null,null,null,null).subscribe(data => {
+        "","",
+        this.observation_reason_visit,  
+        "1",
+        "","","","",""
+        ).subscribe(data => {
 
-          console.log("registerVisit data: ",data);
+          console.log("registerVisit 2 data: ",data);
 
-          /*
+          
           if(data){
             if(data.infoText){
               this.visitor_name = data.infoText?.name;
@@ -638,12 +711,16 @@ export class RegisterPage implements OnInit, AfterViewInit{
               
             }
           }
-          */
-            
           
-            //this.continueDelivery();
+            
+            if(this.paramShowVisitorInformation){
+              this.continueDelivery();
+            }else{
+              this.saveDelivery();
+            }
+            
 
-            this.continueFinish();
+            //this.continueFinish();
           
             this.loading = false;
 

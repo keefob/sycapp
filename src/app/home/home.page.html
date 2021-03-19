@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title>
-      Home
+      {{ 'HOME.VIEW_PROFILE' | translate }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -19,34 +19,65 @@
 
     </ion-row>
 
-    <br />
 
     <ion-row class="font-ex-34">
       <ion-col>
-        <div>Welcome</div>
+        <div>{{ 'HOME.TITLE' | translate }}</div>
       </ion-col>
     </ion-row>
 
-    <ion-row class="font-lt-16">
-      <ion-col>
-        <p>Courvoisier Courts</p>
-      </ion-col>
-    </ion-row>
-
-    <ion-row class="font-lt-16">
-      <ion-col>
-        <p>701 Brickell Key Blvd. </p>
-      </ion-col>
-    </ion-row>
 
     <br />
-    <br />
+    
 
-    <ion-row class="font-lt-16">
-      <ion-col>
-        <ion-button expand="block" size="large" [routerLink]="['/register']">Continue</ion-button>
-      </ion-col>
-    </ion-row>
+    <form name="form"  #f="ngForm" novalidate>
+
+
+      <ion-list >
+  
+        <!--
+        <ion-item>
+          <ion-label position="stacked">Select apartment you are looking for:</ion-label>
+          
+          <ion-input #cunit_entityEl type="number" [(ngModel)]="unitEntityDesc" name="cunit_entityTxt" required
+            #cunit_entityTxt="ngModel" [ngClass]="{ 'is-invalid': f.submitted && cunit_entityTxt.invalid }"
+            placeholder="- - -"></ion-input>
+  
+          <div *ngIf="f.submitted && cunit_entityTxt.invalid" class="invalid-feedback">
+            <div *ngIf="cunit_entityTxt.errors.required">Aparment is required</div>
+          </div>
+  
+  
+        </ion-item>
+        -->
+  
+
+        <ion-item>
+          <select class="select2" 
+          id="kt_select2_Department" >
+            </select>
+          
+          
+  
+        </ion-item>
+
+       
+  
+  
+
+        <div style="height: 90px;"></div>
+
+        <ion-button expand="block" size="large" 
+        (click)="saveResident()" >
+          <ion-icon slot="end" style="color: #fff" ></ion-icon>
+          {{ 'HOME.BTN_CONTINUE' | translate }}
+        </ion-button>
+  
+  
+  
+      </ion-list>
+
+  </form>
 
 
     

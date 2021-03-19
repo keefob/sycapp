@@ -1,0 +1,70 @@
+{
+    "GLOBAL": {
+        "ALERT_TITLE": "Alert",
+        "PHOTO_TITLE": "Taking a photo ...",
+        "PHOTO_UPLOAD": "Uploading face for registration ...",
+        "PHOTO_UPLOAD_FACE": " Uploading image for face recognition ...",
+        "SELECT": "Select"
+    },
+    "HOME": {
+        "TITLE": "Welcome",
+        "VIEW_PROFILE": "Home",
+        "BTN_CONTINUE": "Continue",
+        "SELECT_APARMENT_PLACEHOLDER": "Select apartment you are looking for"
+        
+    },
+    "CAMERA": {
+        "TITLE": "Camera",
+        "BTN_CONTINUE": "Take picture of front of ID"
+        
+    },
+    "REGISTER": {
+        
+        "LABEL_FIRSTNAME": "Resident First Name",
+        "REQUIRED_FIRSTNAME": "Resident First Name is required",
+        "LABEL_LASTNAME": "Resident Last Name",
+        "REQUIRED_LASTNAME": "Resident Last Name is required",
+        "LABEL_REASONVISIT": "Select Reason of Your Visit",
+        "REQUIRED_REASONVISIT": "Reason of Your Visit is required",
+        "LABEL_VENDORNAME": "Vendor Name",
+        "REQUIRED_VENDORNAME": "Vendor Name is required",
+
+        "LABEL_ID": "Id",
+        "REQUIRED_ID": "Id is required",
+
+        "LABEL_VISITORNAME": "Visitor Name",
+        "REQUIRED_VISITORNAME": "Visitor Name is required",
+
+        "LABEL_VISITORLASTNAME": "Visitor Last Name",
+        "REQUIRED_VISITORLASTNAME": "Visitor Last Name is required",
+
+        "LABEL_SEX": "Sex Name",
+        "REQUIRED_SEX": "Sex is required",
+
+
+        "SUCCESS": "Registration Success",
+
+        "MSG_APPROACH": "Please approach the Front Desk",
+
+        "GO_HOME": "Home",
+
+
+        "FINISH": "Confirm & Continue",
+
+        "PHOTO": "Take picture of front of ID",
+
+        "RE_PHOTO": "Re-Take picture of front of ID",
+
+
+        "TITLE_APARMENT" : "Apartment Information",
+
+        "TITLE_PHOTO" : "Take picture of front of ID",
+
+        "TITLE_VISITOR" : "Visitor Information",
+
+        "TITLE_FINISH" : "Finish",
+        
+        "BTN_CONTINUE": "Continue"
+    }
+
+}

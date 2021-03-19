@@ -1,23 +1,38 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title>
-      Camera Feature
+      {{ 'CAMERA.TITLE' | translate }}
     </ion-title>
+
+    <ion-buttons slot="end" >
+
+      <ion-button  (click)="showFaceModeWebcam()">
+        <ion-icon slot="icon-only" name="camera-reverse-outline" ></ion-icon>
+      </ion-button>
+  
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
   <ion-grid id="container">
+
+    
+
     <ion-row>
 
-      <webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+      <webcam [height]="700" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
       [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
       [videoOptions]="videoOptions"
       [imageQuality]="1"
       (cameraSwitched)="cameraWasSwitched($event)"
       (initError)="handleInitError($event)"
+      #cameraWeb
       ></webcam>
+
+      <canvas #canvas [width]="500" [height]="700"></canvas>
 
     </ion-row>
 
@@ -32,10 +47,20 @@
 
     <ion-row class="font-lt-16">
       <ion-col>
-        <ion-button expand="block" (click)="triggerSnapshot()">{{option==1 ? 'Take picture of front of ID': 'Take picture of back of ID'}}</ion-button>
+        <ion-button expand="block"  (click)="triggerSnapshot()">{{ 'CAMERA.BTN_CONTINUE' | translate }}</ion-button>
       </ion-col>
     </ion-row>
 
+    <!--
+    <ion-row  style="text-align: center;">
+      <ion-col>
+        <ion-button fill="outline" (click)="showNextWebcam(true)">
+          <ion-icon slot="icon-only" name="camera-reverse-outline" ></ion-icon>
+        </ion-button>
+
+      </ion-col>
+    </ion-row>
+    -->
 
     
 
