@@ -41,6 +41,9 @@
         "LABEL_SEX": "Sex Name",
         "REQUIRED_SEX": "Sex is required",
 
+        "LABEL_PLATE": "Plate",
+        "REQUIRED_PLATE": "Plate is required",
+
 
         "SUCCESS": "Registration Success",
 

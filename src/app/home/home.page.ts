@@ -22,6 +22,8 @@ export class HomePage {
   titleSelect: string;
   titleSelectAparment: string;
 
+  entity: any;
+
   constructor(private activatedRoute: ActivatedRoute,
     private deliveryService: DeliveryService,
     public popoverController: PopoverController,
@@ -88,6 +90,16 @@ export class HomePage {
         this.listUnitEntity = listResult.listUnitEntity;
         console.log("listUnitEntity, ",this.listUnitEntity);
         this.setDepartment(this.listUnitEntity);
+
+        this.deliveryService.queryEntity(localStorage.getItem('centity')).subscribe(
+          listResult => {
+            if(listResult.listEntity){
+              this.entity = listResult.listEntity[0];
+              //console.log("entidad: ",entidad);
+            }
+            
+          }
+        );
       }
     );
 

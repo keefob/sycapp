@@ -84,6 +84,8 @@ export class RegisterPage implements OnInit, AfterViewInit{
 
   loading: boolean = false;
 
+  plate;
+
   //@ViewChild('cunit_entityEl', { static: true }) cunit_entityElInput: ElementRef;
 
   //@ViewChild("cunitEntityElement", { read: ElementRef }) cunit_entityElInput: ElementRef;
@@ -102,6 +104,8 @@ export class RegisterPage implements OnInit, AfterViewInit{
   elementType = NgxQrcodeElementTypes.URL;
   correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
   valueQR = '';
+
+  entity : any;
 
   constructor(
     public alertController: AlertController,
@@ -184,6 +188,17 @@ export class RegisterPage implements OnInit, AfterViewInit{
 
       console.log("id_visit_log: "+this.id_visit_log);
       console.log("cunit_entity: "+this.cunit_entity);
+
+
+      this.deliveryService.queryEntity(localStorage.getItem('centity')).subscribe(
+        listResult => {
+          if(listResult.listEntity){
+            this.entity = listResult.listEntity[0];
+            //console.log("entidad: ",entidad);
+          }
+          
+        }
+      );
       
 
 
@@ -563,12 +578,25 @@ export class RegisterPage implements OnInit, AfterViewInit{
 
           this.valueQR=data.token;
 
-          this.continueDeliveryCapture();
+          if(this.entity.disableContactlessPhoto==='0'){
+            this.continueDeliveryCapture();
+            this.textTakePhoto = this.titlePhoto;
+            this.modalCamera();
+          }else{
+
+            if(this.entity.disableOcrContactless==='0'){
+              this.continueDelivery();
+              
+            }else{
+              this.continueFinish();
+            }
+
+            
+          }
+          
           //this.textTakePhoto = "Take picture of front of ID";
 
-          this.textTakePhoto = this.titlePhoto;
-
-          this.modalCamera();
+          
           
           //this.continueDelivery();
 
@@ -611,7 +639,8 @@ export class RegisterPage implements OnInit, AfterViewInit{
       "",//this.address1,
       "",
       "",//this.dateOfBirth,
-      this.sex
+      this.sex,
+      this.plate
       ).subscribe(data => {
         
           console.log("data.id_visit_log 2",data.id_visit_log);
@@ -632,7 +661,7 @@ export class RegisterPage implements OnInit, AfterViewInit{
     this.showFaceCapture = true;
     this.textHeader = "Finish";
     */
-  }
+  } 
 
   
 
@@ -688,7 +717,7 @@ export class RegisterPage implements OnInit, AfterViewInit{
           console.log("registerVisit 2 data: ",data);
 
           
-          if(data){
+          if(data && this.entity.disableOcrContactless==='0'){
             if(data.infoText){
               this.visitor_name = data.infoText?.name;
               this.visitor_lastname = data.infoText?.lastname;
@@ -713,7 +742,8 @@ export class RegisterPage implements OnInit, AfterViewInit{
           }
           
             
-            if(this.paramShowVisitorInformation){
+            //if(this.paramShowVisitorInformation){
+            if(this.entity.disableOcrContactless==='0'){              
               this.continueDelivery();
             }else{
               this.saveDelivery();

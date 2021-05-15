@@ -41,6 +41,8 @@
         "LABEL_SEX": "Sexo",
         "REQUIRED_SEX": "Sexo es requerido",
 
+        "LABEL_PLATE": "Placa",
+        "REQUIRED_PLATE": "Placa es requerido",
 
         "SUCCESS": "Registro exitoso",
 

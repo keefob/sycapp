@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,9 @@ export class DeliveryService {
   API_2 : string;
   API_REGISTER_URL : string;
 
-  constructor(private http: HttpClient) { 
+  API_ENTITY_URL : string;
+
+  constructor(private http: HttpClient,private datePipe: DatePipe,) { 
     const parsedUrl = new URL(window.location.href);
     const baseUrl = parsedUrl.hostname;
         
@@ -34,6 +37,8 @@ export class DeliveryService {
     this.API_CATALOG_URL = this.API + 'api/usuarios';
 
     this.API_REGISTER_URL = this.API_2 + 'aws/rest/file';
+
+    this.API_ENTITY_URL = this.API_2 + 'CodeGeneratorWsConn/rest/codeGeneratorServices';
 
   }
 
@@ -111,6 +116,7 @@ export class DeliveryService {
     cestatus,
     visitor_id,
     visitor_adreess1,visitor_adreess2,visitor_dob,visitor_sex
+    , plate: any=null
     ): Observable<any> {
 
       const httpHeaders = new HttpHeaders();
@@ -147,12 +153,29 @@ export class DeliveryService {
     formdata.append("visitor_dob", visitor_dob);
     formdata.append("visitor_sex", visitor_sex);
 
+    formdata.append("plate", plate);
+    
+    var currentDateAccess = new Date();
+    var currentLocal = this.datePipe.transform(currentDateAccess, "yyyy-MM-dd HH:mm:ss");
+
+    formdata.append("appLocalDate", currentLocal);
+
     
 
     return this.http.post<any>(this.API_REGISTER_URL + `/visit_log`, formdata, {headers: httpHeaders});
   }
 
-  
+  queryEntity(centity): Observable<any>{
+     
+    const httpHeaders2 = new HttpHeaders();
+    let body = "centity=" + centity + "&name=0&ccompany=1&state=0&maxAmountDependents=0";
+
+    let headers = {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    };
+    
+    return this.http.post<any>(this.API_ENTITY_URL + `/queryEntity`, body, {headers: headers});
+  }
   
 }
 
