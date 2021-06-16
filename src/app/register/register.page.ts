@@ -529,7 +529,7 @@ export class RegisterPage implements OnInit, AfterViewInit{
 
     this.textHeader = this.titleFinish;
 
-    this.entity.automaticallyHomePage="1";
+    //this.entity.automaticallyHomePage="1";
 
     setTimeout(() => {
       if(this.entity.automaticallyHomePage==='1'){
