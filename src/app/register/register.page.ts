@@ -528,6 +528,19 @@ export class RegisterPage implements OnInit, AfterViewInit{
     //this.showGuestInformation=false;
 
     this.textHeader = this.titleFinish;
+
+    this.entity.automaticallyHomePage="1";
+
+    setTimeout(() => {
+      if(this.entity.automaticallyHomePage==='1'){
+        this.showFinish = false;
+        console.log("entro redirect home...");
+        this.goHome();
+      }
+    }, 2000);
+
+    
+
   }
 
 

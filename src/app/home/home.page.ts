@@ -95,7 +95,7 @@ export class HomePage {
           listResult => {
             if(listResult.listEntity){
               this.entity = listResult.listEntity[0];
-              //console.log("entidad: ",entidad);
+              console.log("entidad: ",this.entity);
             }
             
           }
