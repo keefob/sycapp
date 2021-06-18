@@ -68,7 +68,7 @@ export class HomePage {
 
   ngOnInit() {
 
-    let centity = "6";
+    let centity = "18";
       localStorage.setItem("centity", centity);
       console.log("se setea centity = "+centity);
       
