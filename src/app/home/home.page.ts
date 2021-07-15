@@ -198,7 +198,7 @@ export class HomePage {
     arrayResult.push({ id: '', text: this.titleSelect }); 
 
     for (let _item of userList){
-      arrayResult.push({ id: _item.cunitEntity, text: _item.description });
+      arrayResult.push({ id: _item.cunitEntity, text: ""+_item.description });
     }
     
 
@@ -208,11 +208,14 @@ export class HomePage {
     jQuery('#kt_select2_Department').select2({
       language: "es",
       placeholder: this.titleSelectAparment ,
-      data: arrayResult
+      data: arrayResult,
     });
 
 
     //jQuery('#select2-search__field').attr( "type", "number" );
+
+
+    
 
 
     jQuery('#kt_select2_Department').on('select2:select', function (e) {
