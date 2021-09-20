@@ -278,12 +278,31 @@
 
       <ion-col>
 
-        <ngx-qrcode
-          [elementType]="elementType"
-          [errorCorrectionLevel]="correctionLevel"
-          [value]="valueQR"
-          alt="QR Code"
-          cssClass="bshadow"></ngx-qrcode>
+
+        <div id="print-section-qr">
+          <ngx-qrcode
+            [elementType]="elementType"
+            [errorCorrectionLevel]="correctionLevel"
+            [value]="valueQR"
+            alt="QR Code"
+            cssClass="bshadow"></ngx-qrcode>
+
+        </div>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+
+
+      <ion-col>
+        
+
+
+        <button style="background-color: #3dc2ff;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;" printSectionId="print-section-qr" ngxPrint >{{ 'REGISTER.BTN_PRINT' | translate }}
+          
+        </button>
 
       </ion-col>
 

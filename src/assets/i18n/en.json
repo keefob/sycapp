@@ -67,7 +67,9 @@
 
         "TITLE_FINISH" : "Finish",
         
-        "BTN_CONTINUE": "Continue"
+        "BTN_CONTINUE": "Continue",
+
+        "BTN_PRINT": "Print"
     }
 
 }

@@ -11,6 +11,7 @@ import { RegisterPage } from './register.page';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
     IonicModule,
     RegisterPageRoutingModule,
     TranslateModule.forChild(),
-    NgxQRCodeModule
+    NgxQRCodeModule,
+    NgxPrintModule
   ],
   declarations: [RegisterPage]
 })

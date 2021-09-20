@@ -22,6 +22,8 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { DatePipe } from '@angular/common';
 
+import {NgxPrintModule} from 'ngx-print';
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -42,7 +44,8 @@ export function createTranslateLoader(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    NgxQRCodeModule
+    NgxQRCodeModule,
+    NgxPrintModule
   ],
   providers: [
     StatusBar,
